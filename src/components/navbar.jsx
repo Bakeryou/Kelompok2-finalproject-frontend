@@ -10,7 +10,7 @@ const NavbarPage = () => {
                 <div>
                     <ul className="flex space-x-7">
                         <li>
-                            <a href="#" className="p-2 text-lg font-semibold rounded hover:bg-orange-500">home</a>
+                            <a href="#" className="p-2 text-lg font-semibold rounded hover:bg-orange-500">Home</a>
                         </li>
                         <li>
                             <a href="#" className="p-2 text-lg font-semibold rounded hover:bg-orange-500">Product</a>
