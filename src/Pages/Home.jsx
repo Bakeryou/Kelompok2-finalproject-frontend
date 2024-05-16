@@ -1,12 +1,12 @@
 import React from 'react'
 import Footer from '../components/Footer'
-import Navbar from '../components/navbar'
+import Navbar from '../components/Navbar'
 
 const HomePage = () => {
     return (
         <>
         <Navbar/>
-        <div>Home</div>
+        <div className="h-screen mt-20">Home</div>
         <Footer/>
         </>
     )
