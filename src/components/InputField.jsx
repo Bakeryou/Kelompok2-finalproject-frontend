@@ -4,7 +4,7 @@ import { HiEyeOff, HiEye } from "react-icons/hi";
 const InputField = ({ label, type, placeholder, value, onChange }) => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const togglePasswordVisibility = () => {
+  const togglePassword = () => {
     setShowPassword(!showPassword);
   };
 
@@ -20,8 +20,8 @@ const InputField = ({ label, type, placeholder, value, onChange }) => {
           className="input"
         />
         {type === "password" && (
-          <div className="absolute right-3 top-3 cursor-pointer" onClick={togglePasswordVisibility}>
-            {showPassword ? <HiEye /> : <HiEyeOff />}
+          <div onClick={togglePassword}>
+            {showPassword ? <HiEye className="eye-icon" /> : <HiEyeOff className="eye-icon" />}
           </div>
         )}
       </div>
