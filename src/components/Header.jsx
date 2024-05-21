@@ -152,7 +152,6 @@ const Header = () => {
                             </Link>
                             <button
                                 onClick={() => {
-                                    // Tambahkan logika logout di sini
                                     setCurrentUser(null);
                                     handleNavigate('/');
                                 }}
