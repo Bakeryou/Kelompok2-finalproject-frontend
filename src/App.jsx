@@ -4,6 +4,10 @@ import MainLayout from './layouts/MainLayout';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import LandingLayout from './layouts/LandingLayout';
+import ProductLayout from './layouts/ProductLayout';
+import Products from './Pages/Products';
+import ProductDetail from './Pages/ProductDetail';
+import Cart from './Pages/Cart';
 
 const App = () => {
   return (
@@ -15,6 +19,11 @@ const App = () => {
         <Route path="/" element={<MainLayout />}>
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
+          <Route path="cart" element={<Cart />} />
+        </Route>
+        <Route path="/" element={<ProductLayout />}>
+          <Route path="products" element={<Products />} />
+          <Route path="productdetail/:id" element={<ProductDetail />} />
         </Route>
       </Routes>
     </Router>
