@@ -1,3 +1,25 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .input {
+      @apply px-3 py-2 w-full rounded-lg border-2 border-border bg-transparent text-primary focus:ring focus:ring-focus focus:border-focus focus:outline-none;
+    }
+  
+    .eye-icon {
+      @apply text-primary w-5 h-5 absolute top-1/2 transform -translate-y-1/2 right-4 cursor-pointer;
+    }
+  
+    .btn {
+      @apply text-white font-bold rounded-lg text-center;
+    }
+  
+    .btn-primary {
+      @apply bg-primary hover:bg-[#0b0a14] focus:outline-none;
+    }
+  
+    .btn-secondary {
+      @apply bg-secondary hover:bg-hover focus:outline-none;
+    }
+  }

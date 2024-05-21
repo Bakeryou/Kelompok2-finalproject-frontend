@@ -5,11 +5,7 @@ import Header from '../components/Header'
 
 const HomePage = () => {
     return (
-        <>
-            <Header/>
-            <div className="h-screen mt-20">Home</div>
-            <Footer />
-        </>
+        <div className="h-screen mt-20">Home</div>
     )
 }
 
