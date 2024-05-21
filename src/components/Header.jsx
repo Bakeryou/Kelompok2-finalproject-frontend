@@ -38,7 +38,7 @@ const Header = () => {
                     </div>
                     <div className="flex items-center justify-center flex-1 sm:justify-start">
                         <div className="flex-shrink-0">
-                            <a href="/" className="text-lg font-bold">Bakeryou</a>
+                            <Link to="/" className="text-lg font-bold">Bakeryou</Link>
                         </div>
                         <div className="hidden sm:flex sm:ml-auto sm:mr-auto">
                             <div className="flex justify-center space-x-8">
