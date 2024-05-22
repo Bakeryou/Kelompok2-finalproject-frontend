@@ -23,6 +23,10 @@ const ProductDetail = () => {
         setQuantity(quantity + 1);
     };
 
+    if (!product) {
+        return <p>Loading...</p>;
+    }
+
     return (
         <div className="p-4 pt-20">
             <div className="flex flex-col md:flex-row items-center">
