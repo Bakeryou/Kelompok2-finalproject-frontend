@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { HiMinusSm, HiPlusSm } from "react-icons/hi";
 import { useParams } from 'react-router-dom';
-import { useProduct } from '../contexts/ProductContext';
-import { useCart } from '../contexts/CartContext';
+import { products } from '../data';
 
 const ProductDetail = () => {
     const { id } = useParams();
-    const { products } = useProduct();
-    const { addToCart } = useCart();
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
         const selectedProduct = products.find(p => p.id === parseInt(id));
         setProduct(selectedProduct);
-    }, [id, products]);
+    }, [id]);
 
     const decreaseQuantity = () => {
         if (quantity > 1) {
@@ -24,13 +21,6 @@ const ProductDetail = () => {
 
     const increaseQuantity = () => {
         setQuantity(quantity + 1);
-    };
-
-    const handleAddToCart = () => {
-        if (product) {
-            addToCart(product, quantity);
-            alert(`${product.name} berhasil ditambahkan ke keranjang!`);
-        }
     };
 
     if (!product) {
@@ -55,7 +45,7 @@ const ProductDetail = () => {
                         <p className="text-xl px-2">{quantity}</p>
                         <button onClick={increaseQuantity} className="bg-[#FFE0B5] px-3 py-2 rounded-md hover:bg-[#eab162]"><HiPlusSm size={20} /></button>
                     </div>
-                    <button onClick={handleAddToCart} className="w-full bg-secondary text-white py-2 px-4 rounded-md hover:bg-hover mx-auto md:mx-0 block">Add To Cart</button>
+                    <button className="w-full bg-secondary text-white py-2 px-4 rounded-md hover:bg-hover mx-auto md:mx-0 block">Add To Cart</button>
                 </div>
             </div>
         </div>

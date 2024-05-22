@@ -1,24 +1,25 @@
 // Product.jsx
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { HiFilter } from "react-icons/hi";
 import ProductCard from '../components/ProductCard';
-import { useProduct } from '../contexts/ProductContext';
+import { categories, products } from '../data';
 import { useNavigate } from 'react-router-dom';
 
 const Products = () => {
-    const { products, selectedCategory, categories, setSelectedCategory, setSelectedProduct } = useProduct();
+    const [selectedCategory, setSelectedCategory] = useState('All');
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const filterButtonRef = useRef(null);
     const navigate = useNavigate();
-
-    const filteredProducts = selectedCategory === 'All' ? products : products.filter(product => product.category === selectedCategory);
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
     };
 
+    const handleCategoryClick = (category) => {
+        setSelectedCategory(category);
+    };
+
     const handleProductClick = (product) => {
-        setSelectedProduct(product);
         navigate(`/productdetail/${product.id}`);
     };
 
@@ -34,7 +35,7 @@ const Products = () => {
                 </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {filteredProducts.map((product, index) => (
+                {products.map((product, index) => (
                     <div key={index} onClick={() => handleProductClick(product)}>
                         <ProductCard product={product} />
                     </div>
@@ -47,11 +48,11 @@ const Products = () => {
                     {categories.map((category) => (
                     <button
                         key={category}
-                        className="text-lg font-semibold hover:bg-[#D8AE7E] transition duration-150 ease-in-out py-2 w-full text-center rounded-xl"
+                        className={`text-lg font-semibold hover:bg-[#D8AE7E] transition duration-150 ease-in-out py-2 w-full text-center rounded-xl ${selectedCategory === category ? 'bg-[#D8AE7E]' : ''}`}
                         onClick={() => {
-                            setSelectedCategory(category);
+                            handleCategoryClick(category);
                             setIsMenuOpen(false);
-                        }}                        >
+                        }}>
                         {category}
                     </button>
                     ))}

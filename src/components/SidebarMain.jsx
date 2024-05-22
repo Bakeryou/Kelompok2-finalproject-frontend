@@ -1,9 +1,9 @@
-import React from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useProduct } from '../contexts/ProductContext';
+import { categories } from '../data';
 
 const SidebarMain = () => {
-    const { categories, selectedCategory, setSelectedCategory } = useProduct();
+    const [selectedCategory, setSelectedCategory] = useState('All');
 
     const handleCategoryClick = (category) => {
         setSelectedCategory(category);
