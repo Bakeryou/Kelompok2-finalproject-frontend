@@ -31,7 +31,7 @@ const Cart = () => {
                     <hr className="my-4 border-t border-gray-700" />
                     <div className="mt-4 flex flex-col md:flex-row justify-between items-center">
                         <div>
-                            <p className="text-lg font-semibold">Sub Total : Rp. 30000</p>
+                            <p className="text-lg font-semibold">Sub Total : Rp. 27000</p>
                             <p>Shipping and taxes calculated at checkout</p>
                         </div>
                         <button className="bg-secondary text-white py-2 px-4 rounded-md hover:bg-hover mt-4 md:mt-0">Checkout</button>
