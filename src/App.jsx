@@ -8,6 +8,7 @@ import ProductLayout from './layouts/ProductLayout';
 import Products from './Pages/Products';
 import ProductDetail from './Pages/ProductDetail';
 import Cart from './Pages/Cart';
+import Profile from './Pages/Profile';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
           <Route path="cart" element={<Cart />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
         <Route path="/" element={<ProductLayout />}>
           <Route path="products" element={<Products />} />
