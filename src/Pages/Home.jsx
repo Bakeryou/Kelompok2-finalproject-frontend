@@ -1,15 +1,13 @@
-import React from 'react'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
-
+import { Link } from 'react-router-dom';
+import InputField from "../components/InputField"
 
 const HomePage = () => {
     return (
-        <div className="flex flex-col min-h-screen  bg-[#f3e2cf]">
-            <main className="container flex-grow px-4 py-8 mx-auto">
-                <section className="py-16 bg-[#f3e2cf]">
-                    <div className="grid items-center grid-cols-1 gap-4 md:grid-cols-2">
-                        <div className="text-center md:text-left">
+        <div className="flex flex-col min-h-screen bg-[#f3e2cf]">
+            <main className="flex-grow">
+                <section className="lg:pt-0 pt-20">
+                    <div className="grid items-center grid-cols-1 gap-8 md:grid-cols-2">
+                        <div className="px-8 text-center md:text-left">
                             <h1 className="mb-6 text-5xl font-bold">
                                 Welcome To Our Bakery Shop
                             </h1>
@@ -19,20 +17,21 @@ const HomePage = () => {
                                 retail bakeries are also categorized as cafes, serving coffee
                                 and tea to customers.
                             </p>
-                            <button className="bg-[#201203] text-white py-2 px-4 rounded">
-                                ORDER NOW
-                            </button>
+                            <Link to="/products">
+                                <button className="bg-[#201203] text-white py-2 px-4 rounded">
+                                    ORDER NOW
+                                </button>
+                            </Link>
                         </div>
-                        <div className="flex justify-center">
+                        <div className="flex justify-end">
                             <img
                                 src="./src/assets/img/paper-bag-with-variety-bread 1.png"
                                 alt="Bakery items"
-                                className="rounded-lg"
                             />
                         </div>
                     </div>
                 </section>
-                <section className="py-16">
+                <section className="py-16 px-8">
                     <div className="flex flex-col items-center">
                         <h2 className="mb-6 text-3xl font-bold text-center">About Us</h2>
                         <p className="max-w-2xl mb-8 text-center">
@@ -47,9 +46,11 @@ const HomePage = () => {
                             Come and experience the warmth and aroma of our bakery – where
                             every bite tells a story of craftsmanship and passion.
                         </p>
-                        <button className="bg-[#201203] text-white py-2 px-4 rounded">
-                            See Our Products
-                        </button>
+                        <Link to="/products">
+                            <button className="bg-[#201203] text-white py-2 px-4 rounded">
+                                SEE OUR PRODUCTS
+                            </button>
+                        </Link>
                     </div>
                 </section>
                 <section className="py-16 bg-[#f3e2cf]">
@@ -57,9 +58,9 @@ const HomePage = () => {
                         <img
                             src="./src/assets/img/Milk Bread Croissants 1.png"
                             alt="Bakery"
-                            className="rounded-lg"
+                            className="h-[600px]"
                         />
-                        <div>
+                        <div className="px-8">
                             <h2 className="mb-4 text-3xl font-bold">Bakeryou</h2>
                             <p className="mb-4">
                                 Enjoy freshly baked bread, hot rolls, wholesome pastries, and
@@ -73,33 +74,27 @@ const HomePage = () => {
                     </div>
                 </section>
                 <section className="py-16 bg-[#f3e2cf]">
-                    <div className="grid items-start grid-cols-1 gap-4 md:grid-cols-2">
-                        <div className="order-2 md:order-1">
+                    <div className="grid items-start grid-cols-1 gap-8 md:grid-cols-2">
+                        <div className="px-8">
                             <h2 className="mb-6 text-3xl font-bold text-center md:text-left">
                                 Contact Us
                             </h2>
-                            <form className="p-6 space-y-4 border-2 rounded-lg shadow-md">
-                                <div>
-                                    <label className="block text-gray-700">Name</label>
-                                    <input
-                                        type="text"
-                                        placeholder="Input your name here"
-                                        className="block w-full mt-1 bg-transparent border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700">Email</label>
-                                    <input
-                                        type="email"
-                                        placeholder="Input your email here"
-                                        className="block w-full mt-1 bg-transparent border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block text-gray-700">Message</label>
+                            <form className="space-y-4">
+                                <InputField
+                                    label="Name"
+                                    type="text"
+                                    placeholder="Input your name here"
+                                />
+                                <InputField
+                                    label="Email"
+                                    type="email"
+                                    placeholder="Input your email here"
+                                />
+                                <div className="flex flex-col gap-2 mt-2">
+                                    <label className="font-medium text-primary">Message</label>
                                     <textarea
                                         placeholder="Input your message here"
-                                        className="block w-full mt-1 bg-transparent border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                                        className="input"
                                         rows="4"
                                     ></textarea>
                                 </div>
@@ -111,11 +106,10 @@ const HomePage = () => {
                                 </button>
                             </form>
                         </div>
-                        <div className="order-1 mb-8 md:order-2">
+                        <div className="flex justify-center">
                             <img
                                 src="./src/assets/img/Bread Photography 2.png"
                                 alt="Bakery items"
-                                className="rounded-lg"
                             />
                         </div>
                     </div>

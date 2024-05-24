@@ -11,6 +11,10 @@ export const products = [
     { id:6, name: 'Donat Stawberry', price: 12000, image: 'https://via.placeholder.com/150', category: 'Donuts', stock: 8, description: 'A long, narrow loaf of French bread.' },
     { id:7, name: 'Donat Chocolate', price: 12000, image: 'https://via.placeholder.com/150', category: 'Donuts', stock: 8, description: 'A long, narrow loaf of French bread.' },
     { id:8, name: 'Cookie Vanilla', price: 10000, image: 'https://via.placeholder.com/150', category: 'Cookies', stock: 8, description: 'A long, narrow loaf of French bread.' },
+    { id:9, name: 'Puff Pastry', price: 20000, image: 'https://via.placeholder.com/150', category: 'Pastry', stock: 8, description: 'A long, narrow loaf of French bread.' },
+    { id:10, name: 'Donat Stawberry', price: 12000, image: 'https://via.placeholder.com/150', category: 'Donuts', stock: 8, description: 'A long, narrow loaf of French bread.' },
+    { id:11, name: 'Donat Chocolate', price: 12000, image: 'https://via.placeholder.com/150', category: 'Donuts', stock: 8, description: 'A long, narrow loaf of French bread.' },
+    { id:12, name: 'Cookie Vanilla', price: 10000, image: 'https://via.placeholder.com/150', category: 'Cookies', stock: 8, description: 'A long, narrow loaf of French bread.' },
 ];
 
 export const cartItems = [
