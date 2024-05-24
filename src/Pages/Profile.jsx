@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import InputField from '../components/InputField';
 
 function Profile() {
     const [name, setName] = useState('John Doe');
@@ -25,118 +26,102 @@ function Profile() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f3e2cf] flex justify-center items-center">
-            <div className="bg-[#f3e2cf] p-10 rounded-lg max-w-4xl w-full flex">
-                <div className="w-1/2 pr-5">
+        <div className="min-h-screen bg-[#f3e2cf] py-20">
+            <div className="bg-[#f3e2cf] px-8 rounded-lg w-full flex flex-col md:flex-row">
+                <div className="w-full md:w-1/2 pr-0 md:pr-5 mb-8 md:mb-0">
                     <h2 className="mb-5 text-2xl font-bold">Edit Profile</h2>
                     <form onSubmit={handleProfileSave}>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
-                                Name
-                            </label>
-                            <input
-                                type="text"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                className="mt-1 block bg-[#f3e2cf] w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                            <InputField
+                            label="Name"
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Input your name here"
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
-                                Email
-                            </label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                className="mt-1 block bg-[#f3e2cf] w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                            <InputField
+                            label="Email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            placeholder="Input your email here"
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
-                                Username
-                            </label>
-                            <input
-                                type="text"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
-                                className="mt-1 block bg-[#f3e2cf] w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                            <InputField
+                            label="Username"
+                            type="text"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Input your username here"
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
-                                Phone Number
-                            </label>
-                            <input
-                                type="text"
-                                value={phoneNumber}
-                                onChange={(e) => setPhoneNumber(e.target.value)}
-                                className="mt-1 block bg-[#f3e2cf] w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                                placeholder="Input your phone number here"
+                            <InputField
+                            label="Phone Number"
+                            type="text"
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            placeholder="Input your phone number here"
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
+                            <div className="flex flex-col gap-2 mt-2">
+                            <label className="font-medium text-primary">
                                 Address
                             </label>
-                            <input
+                            <textarea
                                 type="text"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
-                                className="mt-1 block bg-[#f3e2cf] w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
+                                className="input"
                                 placeholder="Input your address here"
                             />
+                            </div>
                         </div>
                         <button
                             type="submit"
-                            className="px-4 py-2 mt-4 text-white bg-black rounded-md"
+                            className="btn btn-primary px-4 py-2"
                         >
                             Save
                         </button>
                     </form>
                 </div>
-                <div className="w-1/2 pl-5">
+                <div className="w-full md:w-1/2 pl-0 md:pl-5">
                     <h2 className="mb-5 text-2xl font-bold">Change Password</h2>
                     <form onSubmit={handlePasswordSave}>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
-                                Current Password
-                            </label>
-                            <input
-                                type="password"
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                                className="mt-1 block bg-[#f3e2cf] w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                                placeholder="Input your current password here"
+                            <InputField
+                            label="Current Password"
+                            type="password"
+                            value={currentPassword}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            placeholder="Input your current password here"
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
-                                New Password
-                            </label>
-                            <input
-                                type="password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                className="mt-1 block bg-[#f3e2cf] w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                                placeholder="Input your new password here"
+                            <InputField
+                            label="New Password"
+                            type="password"
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            placeholder="Input your new password here"
                             />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-700">
-                                Confirm Password
-                            </label>
-                            <input
-                                type="password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                className="mt-1 block bg-[#f3e2cf] w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"
-                                placeholder="Confirm your new password here"
+                            <InputField
+                            label="Confirm Password"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            placeholder="Confirm your new password here"
                             />
                         </div>
                         <button
                             type="submit"
-                            className="px-4 py-2 mt-4 text-white bg-black rounded-md"
+                            className="btn btn-primary px-4 py-2"
                         >
                             Save
                         </button>
