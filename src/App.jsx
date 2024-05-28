@@ -11,6 +11,7 @@ import Cart from './Pages/Cart';
 import Profile from './Pages/Profile';
 import DashboardLayout from './layouts/DashboardLayout';
 import UpdateStock from './Pages/Admin/UpdateStock';
+import AddProducts from './Pages/Admin/Products';
 import Payment from './Pages/Payment';
 import Orders from './Pages/Orders';
 import OrderDetail from './Pages/OrderDetail';
@@ -37,6 +38,7 @@ const App = () => {
         </Route>
         <Route path="/admin" element={<DashboardLayout />}>
           <Route path="updatestock" element={<UpdateStock />} />
+          <Route path="products" element={<AddProducts />} />
         </Route>
       </Routes>
     </Router>
