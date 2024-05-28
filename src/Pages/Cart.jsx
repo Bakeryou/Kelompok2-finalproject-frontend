@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const Cart = () => {
     return (
-        <div className="p-4 pt-20 h-screen bg-[#FFF2D7]">
+        <div className="p-4 pt-20 h-screen">
             {cartItems.length === 0 ? (
                 <p className="text-center text-lg">Keranjang belanja Anda kosong</p>
             ) : (

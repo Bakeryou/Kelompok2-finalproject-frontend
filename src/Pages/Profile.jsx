@@ -26,8 +26,8 @@ function Profile() {
     };
 
     return (
-        <div className="min-h-screen bg-[#f3e2cf] py-20">
-            <div className="bg-[#f3e2cf] px-8 rounded-lg w-full flex flex-col md:flex-row">
+        <div className="min-h-screen py-20">
+            <div className="px-8 rounded-lg w-full flex flex-col md:flex-row">
                 <div className="w-full md:w-1/2 pr-0 md:pr-5 mb-8 md:mb-0">
                     <h2 className="mb-5 text-2xl font-bold">Edit Profile</h2>
                     <form onSubmit={handleProfileSave}>
