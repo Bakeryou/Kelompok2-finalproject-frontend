@@ -1,4 +1,3 @@
-import React from 'react';
 import HalalLogo from '../assets/img/logohalal.png'
 
 const Footer = () => {
