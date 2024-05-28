@@ -1,5 +1,6 @@
 import { HiMinusSm, HiPlusSm, HiTrash } from "react-icons/hi";
 import { cartItems } from '../data';
+import { Link } from "react-router-dom";
 
 const Cart = () => {
     return (
@@ -34,7 +35,9 @@ const Cart = () => {
                             <p className="text-lg font-semibold">Sub Total : Rp. 27000</p>
                             <p>Shipping and taxes calculated at checkout</p>
                         </div>
+                        <Link to="/payment">
                         <button className="bg-secondary text-white py-2 px-4 rounded-md hover:bg-hover mt-4 md:mt-0">Checkout</button>
+                        </Link>                    
                     </div>
                 </>
             )}

@@ -11,6 +11,7 @@ import Cart from './Pages/Cart';
 import Profile from './Pages/Profile';
 import DashboardLayout from './layouts/DashboardLayout';
 import UpdateStock from './Pages/Admin/UpdateStock';
+import Payment from './Pages/Payment';
 
 const App = () => {
   return (
@@ -24,6 +25,7 @@ const App = () => {
           <Route path="register" element={<Register />} />
           <Route path="cart" element={<Cart />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="payment" element={<Payment />} />
         </Route>
         <Route path="/" element={<ProductLayout />}>
           <Route path="products" element={<Products />} />
