@@ -23,7 +23,7 @@ const NavbarDashboard = () => {
     };
 
     return (
-        <nav className="bg-contentbox flex w-full h-[71px] px-7 items-center justify-end sticky top-0 z-50">
+        <nav className="bg-white flex w-full h-[71px] px-7 items-center justify-end sticky top-0 z-50">
             {/* Search bar */}
             <div className="hidden lg:flex flex-1">
                 <div className="relative">

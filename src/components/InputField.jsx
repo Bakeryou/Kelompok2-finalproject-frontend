@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { HiEyeOff, HiEye } from "react-icons/hi";
 
 const InputField = ({ label, type, placeholder, value, onChange }) => {
