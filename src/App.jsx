@@ -12,6 +12,8 @@ import Profile from './Pages/Profile';
 import DashboardLayout from './layouts/DashboardLayout';
 import UpdateStock from './Pages/Admin/UpdateStock';
 import Payment from './Pages/Payment';
+import Orders from './Pages/Orders';
+import OrderDetail from './Pages/OrderDetail';
 
 const App = () => {
   return (
@@ -26,6 +28,8 @@ const App = () => {
           <Route path="cart" element={<Cart />} />
           <Route path="profile" element={<Profile />} />
           <Route path="payment" element={<Payment />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="orderdetail/:orderId" element={<OrderDetail />} />
         </Route>
         <Route path="/" element={<ProductLayout />}>
           <Route path="products" element={<Products />} />
