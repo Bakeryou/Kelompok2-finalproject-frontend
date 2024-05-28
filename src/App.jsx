@@ -9,6 +9,8 @@ import Products from './Pages/Products';
 import ProductDetail from './Pages/ProductDetail';
 import Cart from './Pages/Cart';
 import Profile from './Pages/Profile';
+import DashboardLayout from './layouts/DashboardLayout';
+import UpdateStock from './Pages/Admin/UpdateStock';
 
 const App = () => {
   return (
@@ -26,6 +28,9 @@ const App = () => {
         <Route path="/" element={<ProductLayout />}>
           <Route path="products" element={<Products />} />
           <Route path="productdetail/:id" element={<ProductDetail />} />
+        </Route>
+        <Route path="/admin" element={<DashboardLayout />}>
+          <Route path="updatestock" element={<UpdateStock />} />
         </Route>
       </Routes>
     </Router>
