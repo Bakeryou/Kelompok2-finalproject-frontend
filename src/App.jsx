@@ -15,6 +15,11 @@ import AddProducts from './Pages/Admin/Products';
 import Payment from './Pages/Payment';
 import Orders from './Pages/Orders';
 import OrderDetail from './Pages/OrderDetail';
+import Category from './Pages/Admin/Category';
+import OrdersAdmin from './Pages/Admin/Orders';
+import Users from './Pages/Admin/Users';
+import Report from './Pages/Admin/Report';
+import PaymentSuccess from './Pages/Admin/PaymentSuccess';
 
 const App = () => {
   return (
@@ -29,6 +34,7 @@ const App = () => {
           <Route path="cart" element={<Cart />} />
           <Route path="profile" element={<Profile />} />
           <Route path="payment" element={<Payment />} />
+          <Route path="paymentsuccess" element={<PaymentSuccess />} />
           <Route path="orders" element={<Orders />} />
           <Route path="orderdetail/:orderId" element={<OrderDetail />} />
         </Route>
@@ -39,6 +45,10 @@ const App = () => {
         <Route path="/admin" element={<DashboardLayout />}>
           <Route path="updatestock" element={<UpdateStock />} />
           <Route path="products" element={<AddProducts />} />
+          <Route path="category" element={<Category />} />
+          <Route path="orders" element={<OrdersAdmin />} />
+          <Route path="users" element={<Users />} />
+          <Route path="report" element={<Report />} />
         </Route>
       </Routes>
     </Router>

@@ -6,10 +6,10 @@ const SidebarDashboard = () => {
     const menus = [
         { name: "Update Stock", icon: HiOutlineCube, path: "/admin/updatestock" },
         { name: "Add Products", icon: HiOutlineCollection, path: "/admin/products" },
-        { name: "Add Category", icon: HiOutlineCollection, path: "#" },
-        { name: "Users", icon: HiOutlineUser, path: "#" },
-        { name: "Orders", icon: HiOutlineClipboardList, path: "#" },
-        { name: "Report", icon: HiOutlineChartBar, margin: true, path: "#" },
+        { name: "Add Category", icon: HiOutlineCollection, path: "/admin/category" },
+        { name: "Users", icon: HiOutlineUser, path: "/admin/users" },
+        { name: "Orders", icon: HiOutlineClipboardList, path: "/admin/orders" },
+        { name: "Report", icon: HiOutlineChartBar, margin: true, path: "/admin/report" },
         { name: "Profile", icon: HiOutlineUser, margin: true, path: "#" },
         { name: "Logout", icon: HiOutlineLogout, path: "/" },
     ];
