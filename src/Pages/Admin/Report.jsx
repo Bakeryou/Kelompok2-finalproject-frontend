@@ -1,41 +1,89 @@
-import React from "react";
+import { orderData, customerData } from '../../data';
 
-const Report = () => {
+const Orders = () => {
+  const combinedData = orderData.map(order => {
+    const customer = customerData.find(cust => cust.id === order.customerId);
+    return {
+      ...order,
+      customerName: customer?.name || 'Unknown',
+      customerEmail: customer?.email || 'Unknown',
+      customerPhoneNumber: customer?.phoneNumber || 'Unknown',
+    };
+  }).filter(order => order.orderTime.completedAt);
+
   return (
-    <div className="min-h-screen p-4 bg-[#FFF2D7] flex flex-col items-center justify-center">
-      <h1 className="text-lg font-bold mb-4">Report</h1>
-      <table className="min-w-full m-4 bg-[#FFF2D7] border-4 border-black">
-        <thead>
-          <tr className="bg-[#D8AE7E]">
-            <th className="py-2 px-4 border border-black">No</th>
-            <th className="py-2 px-4 border border-black">Name</th>
-            <th className="py-2 px-4 border border-black">Email</th>
-            <th className="py-2 px-4 border border-black">Phone Number</th>
-            <th className="py-2 px-4 border border-black">Product Name</th>
-            <th className="py-2 px-4 border border-black">Qty</th>
-            <th className="py-2 px-4 border border-black">Price</th>
-            <th className="py-2 px-4 border border-black">Tanggal Pesan</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr className="">
-            <td className="py-2 px-4 border border-black">1</td>
-            <td className="py-2 px-4 border border-black">John Doe</td>
-            <td className="py-2 px-4 border border-black">john@gmail.com</td>
-            <td className="py-2 px-4 border border-black">123456789</td>
-            <td className="py-2 px-4 border border-black">Croissant</td>
-            <td className="py-2 px-4 border border-black">1</td>
-            <td className="py-2 px-4 border border-black">Rp 15.000</td>
-            <td className="py-2 px-4 border border-black">5/15/2024</td>
-          </tr>
-        </tbody>
-      </table>
-      <div className="grid grid-cols-2">
-        <span className="mt-4 text-right font-bold ">Total Earning</span>
-        <span className="mt-4 text-left font-bold">Rp 15.000</span>
+    <div className="h-screen">
+      <div className="px-4 mx-auto">
+        <div className="-mx-4 flex flex-wrap">
+          <div className="w-full">
+            <h2 className="text-2xl font-bold mb-4">Report</h2>
+            <div className="max-w-full overflow-x-auto">
+              <table className="w-full table-auto">
+                <thead className="bg-[#D8AE7E] text-center">
+                  <tr>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      No Pesanan
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Name
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Email
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Phone Number
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Order Option
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Total
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Ordered At
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Completed At
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {combinedData.map((order, index) => (
+                    <tr key={order.id}>
+                      <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {index + 1}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-2 dark:text-dark-7">
+                        {order.customerName}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {order.customerEmail}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {order.customerPhoneNumber}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-2 dark:text-dark-7">
+                        {order.orderSummary.orderOptions}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        Rp. {order.orderSummary.total.toLocaleString()}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {order.orderTime.orderedAt}
+                      </td>
+                      <td className="border-b border-r border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {order.orderTime.completedAt}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Report;
+export default Orders;

@@ -1,38 +1,23 @@
-import React from "react";
+import { HiBadgeCheck } from "react-icons/hi";
+import { Link } from "react-router-dom";
 
 const PaymentSuccess = () => {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f3e2cf]">
-      <div className="flex items-center justify-center mb-4">
-        <div className="bg-green-500 rounded-full p-3">
-          <svg
-            className="w-8 h-8 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M5 13l4 4L19 7"
-            ></path>
-          </svg>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4">
+      <div className="flex items-center justify-center mb-6">
+        <div className="rounded-full">
+          <HiBadgeCheck className="w-20 h-20 text-green-500" />
         </div>
       </div>
-      <h1 className="text-2xl font-semibold text-black mb-2 p-3">
+      <h1 className="text-3xl font-semibold text-black mb-4 text-center">
         Pembayaran Berhasil
       </h1>
-      <p className="text-black mb-4 p-3">
+      <p className="text-lg text-black mb-6 text-center">
         Terima Kasih Telah Melakukan Pembayaran
       </p>
-      <button
-        onClick={() => (window.location.href = "/")}
-        className="px-4 py-2 bg-black text-white rounded-md hover:bg-brown-800 transition"
-      >
-        Kembali Ke Halaman Utama
-      </button>
+      <Link to="/">
+      <button className="px-4 py-2 bg-secondary text-white rounded-md hover:bg-hover transition">Kembali Ke Halaman Utama</button>
+      </Link>
     </div>
   );
 };

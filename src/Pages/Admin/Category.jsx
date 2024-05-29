@@ -1,73 +1,110 @@
-import React, { useState } from "react";
+import { categories } from '../../data';
+import { HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi";
+import { useState } from 'react';
 
 const Category = () => {
-  const [categories, setCategories] = useState([
-    { id: 1, name: "Bread" },
-    { id: 2, name: "Donat" },
-    { id: 3, name: "Pastry" },
-  ]);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [editCategory, setEditCategory] = useState(null);
 
-  const addCategory = () => {
-    const newCategory = { id: categories.length + 1, name: "New Category" };
-    setCategories([...categories, newCategory]);
+  const toggleEditModal = () => setShowEditModal(!showEditModal);
+  const toggleAddModal = () => setShowAddModal(!showAddModal);
+
+  const handleEditCategory = (categoryId) => {
+    const categoryToEdit = categories.find(category => category.id === categoryId);
+    setEditCategory(categoryToEdit);
+    toggleEditModal();
   };
 
-  const editCategory = (id) => {
-    const newCategories = categories.map((category) =>
-      category.id === id
-        ? { ...category, name: prompt("Enter new name:", category.name) }
-        : category
-    );
-    setCategories(newCategories);
-  };
-
-  const deleteCategory = (id) => {
-    const newCategories = categories.filter((category) => category.id !== id);
-    setCategories(newCategories);
+  const handleDeleteCategory = (categoryId) => {
+    alert("Deleting category with ID: " + categoryId);
   };
 
   return (
-    <div className="min-h-screen p-4 bg-[#FFF2D7] flex flex-col items-center justify-center">
-      <div className="grid grid-cols-2">
-        <h1 className="text-xl font-bold">Category List</h1>
-        <button
-          className="mt-4 bg-black text-white py-2 px-4 rounded hover:bg-black"
-          onClick={addCategory}
-        >
+    <div className="h-screen">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">Category List</h2>
+        <button onClick={toggleAddModal} className="btn btn-secondary py-2 px-4">
           Add Category
         </button>
       </div>
-      <table className="min-w-full m-4 bg-[#FFF2D7] border-4 border-black">
-        <thead>
-          <tr className="bg-[#D8AE7E]">
-            <th className="py-2 px-4 border border-black">No</th>
-            <th className="py-2 px-4 border border-black">Category</th>
-            <th className="py-2 px-4 border border-black">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((category, index) => (
-            <tr key={category.id}>
-              <td className="py-2 px-4 border border-black">{index + 1}</td>
-              <td className="py-2 px-4 border border-black">{category.name}</td>
-              <td className="py-2 px-4 border border-black">
-                <button
-                  onClick={() => editCategory(category.id)}
-                  className="mr-2 text-blue-500 hover:text-blue-700"
-                >
-                  ✏️
-                </button>
-                <button
-                  onClick={() => deleteCategory(category.id)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  🗑️
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="-mx-4 flex flex-wrap">
+        <div className="w-full">
+          <div className="max-w-full overflow-x-auto">
+            <table className="w-full table-auto">
+              <thead className="bg-[#D8AE7E] text-center">
+                <tr>
+                  <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">No</th>
+                  <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">Category Name</th>
+                  <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {categories.filter(category => category.name !== 'All').map((category, index) => (
+                  <tr key={category.id}>
+                    <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">{index + 1}</td>
+                    <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">{category.name}</td>
+                    <td className="border-b border-r border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-2 dark:text-dark-7">
+                      <button onClick={() => handleEditCategory(category.id)} className="mr-2 text-secondary hover:text-hover">
+                        <HiOutlinePencilAlt size={24} />
+                      </button>
+                      <button onClick={() => handleDeleteCategory(category.id)} className="text-red-700 hover:text-red-800">
+                        <HiOutlineTrash size={24} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {/* Edit Modal */}
+      {showEditModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="relative w-full max-w-lg max-h-full overflow-y-auto bg-white p-8 rounded-lg mx-4">
+            <button onClick={toggleEditModal} className="absolute top-2 right-2 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center">
+              <svg className="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+              <span className="sr-only">Close modal</span>
+            </button>
+            <h3 className="text-lg font-semibold mb-4">Edit Category</h3>
+            <form>
+              <div className="grid gap-4 mb-4 grid-cols-2">
+                <div className="col-span-2">
+                  <label htmlFor="edit-category" className="block mb-2 text-sm font-medium">Category</label>
+                  <input type="text" id="edit-category" defaultValue={editCategory.name} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Enter category name" required />
+                </div>
+              </div>
+              <button type="submit" className="btn btn-secondary py-2 px-4">Update Category</button>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Add Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="relative w-full max-w-lg max-h-full overflow-y-auto bg-white p-8 rounded-lg mx-4">
+            <button onClick={toggleAddModal} className="absolute top-2 right-2 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center">
+              <svg className="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+              <span className="sr-only">Close modal</span>
+            </button>
+            <h3 className="text-lg font-semibold mb-4">Add Category</h3>
+            <form>
+              <div className="grid gap-4 mb-4 grid-cols-2">
+                <div className="col-span-2">
+                  <label htmlFor="add-category" className="block mb-2 text-sm font-medium">Category</label>
+                  <input type="text" id="add-category" className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Enter category name" required />
+                </div>
+              </div>
+              <button type="submit" className="btn btn-secondary py-2 px-4">Add Category</button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

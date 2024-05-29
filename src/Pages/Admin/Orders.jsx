@@ -1,81 +1,103 @@
-import React from "react";
-
-const orders = [
-  {
-    noPesanan: 1,
-    name: "John Doe",
-    email: "john@gmail.com",
-    phoneNumber: "123456789",
-    productName: "Croissant",
-    qty: 1,
-    price: "Rp 15.000",
-    tanggalPesan: "5/15/2024",
-    statusPesanan: "Selesai",
-  },
-];
+import { orderData, customerData } from '../../data';
 
 const Orders = () => {
+  const combinedData = orderData.map(order => {
+    const customer = customerData.find(cust => cust.id === order.customerId);
+    return {
+      ...order,
+      customerName: customer?.name || 'Unknown',
+      customerEmail: customer?.email || 'Unknown',
+      customerPhoneNumber: customer?.phoneNumber || 'Unknown',
+    };
+  });
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#f3e2cf]">
-      <div className="overflow-x-auto">
-        <div className="grid grid-cols-3 justify-items-stretch">
-          <h1 className=" p-5 text-xl font-bold justify-self-start">
-            Category List
-          </h1>
-          <input
-            placeholder="Search Orders"
-            className="p-2 block bg-[#f3e2cf] border-black rounded-md justify-self-end"
-          />
-          <button className="mt-4 bg-black text-white py-2 px-4 rounded hover:bg-black justify-self-end">
-            Search
-          </button>
+    <div className="h-screen">
+      <div className="px-4 mx-auto">
+        <div className="-mx-4 flex flex-wrap">
+          <div className="w-full">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">Order List</h2>
+              <div className="flex items-center">
+                <input
+                  placeholder="Search Orders"
+                  className="p-2 bg-transparent border border-black rounded-md w-64"
+                />
+                <button className="ml-4 bg-black text-white py-2 px-4 rounded hover:bg-black">
+                  Search
+                </button>
+              </div>
+            </div>
+            <div className="max-w-full overflow-x-auto">
+              <table className="w-full table-auto">
+                <thead className="bg-[#D8AE7E] text-center">
+                  <tr>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      No Pesanan
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Name
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Email
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Phone Number
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Order Option
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Total
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Tanggal Pesan
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Status
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {combinedData.map((order, index) => (
+                    <tr key={order.id}>
+                      <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {index + 1}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-2 dark:text-dark-7">
+                        {order.customerName}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {order.customerEmail}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {order.customerPhoneNumber}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-2 dark:text-dark-7">
+                        {order.orderSummary.orderOptions}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        Rp. {order.orderSummary.total.toLocaleString()}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {order.orderTime.orderedAt}
+                      </td>
+                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
+                        {order.orderTime.completedAt ? 'Completed' : 'Pending'}
+                      </td>
+                      <td className="border-b border-r border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-2 dark:text-dark-7">
+                        <button className="bg-black text-white py-1 px-3 rounded">Update</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-        <table className="min-w-full m-4 bg-[#FFF2D7] border-4 border-black">
-          <thead>
-            <tr className="bg-[#D8AE7E]">
-              <th className="py-2 px-4 border border-black">No Pesanan</th>
-              <th className="py-2 px-4 border border-black">Name</th>
-              <th className="py-2 px-4 border border-black">Email</th>
-              <th className="py-2 px-4 border border-black">Phone Number</th>
-              <th className="py-2 px-4 border border-black">Product Name</th>
-              <th className="py-2 px-4 border border-black">Qty</th>
-              <th className="py-2 px-4 border border-black">Price</th>
-              <th className="py-2 px-4 border border-black">Tanggal Pesan</th>
-              <th className="py-2 px-4 border border-black">Status Pesanan</th>
-              <th className="py-2 px-4 border border-black">Update</th>
-            </tr>
-          </thead>
-          <tbody>
-            {orders.map((order, index) => (
-              <tr key={index} className="border-black bg-[#f3e2cf]">
-                <td className="py-2 px-4 border border-black">
-                  {order.noPesanan}
-                </td>
-                <td className="py-2 px-4 border border-black">{order.name}</td>
-                <td className="py-2 px-4 border border-black">{order.email}</td>
-                <td className="py-2 px-4 border border-black">
-                  {order.phoneNumber}
-                </td>
-                <td className="py-2 px-4 border border-black">
-                  {order.productName}
-                </td>
-                <td className="py-2 px-4 border border-black">{order.qty}</td>
-                <td className="py-2 px-4 border border-black">{order.price}</td>
-                <td className="py-2 px-4 border border-black">
-                  {order.tanggalPesan}
-                </td>
-                <td className="py-2 px-4 border border-black">
-                  {order.statusPesanan}
-                </td>
-                <td className="py-2 px-4 border border-black">
-                  <button className="bg-black text-white py-1 px-3 rounded">
-                    Update
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
       </div>
     </div>
   );

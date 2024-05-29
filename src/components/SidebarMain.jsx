@@ -6,7 +6,7 @@ const SidebarMain = () => {
     const [selectedCategory, setSelectedCategory] = useState('All');
 
     const handleCategoryClick = (category) => {
-        setSelectedCategory(category);
+        setSelectedCategory(category.name);
     };
 
     return (
@@ -17,13 +17,16 @@ const SidebarMain = () => {
             <div className="px-3 pb-4">
                 <ul className="space-y-2 font-normal ">
                 {categories.map((category) => (
-                    <li key={category}>
+                    <li key={category.id}>
                     <Link
-                        to="/products"
-                        className={`flex items-center w-full p-2 text-black rounded-lg hover:bg-[#D8AE7E] group ${selectedCategory === category ? 'bg-[#D8AE7E]' : ''}`}
+                        to={{
+                            pathname: '/products',
+                            search: category.name === 'All' ? '' : `?category=${category.name}`,
+                        }}
+                        className={`flex items-center w-full p-2 text-black rounded-lg hover:bg-[#D8AE7E] group ${selectedCategory === category.name ? 'bg-[#D8AE7E]' : ''}`}
                         onClick={() => handleCategoryClick(category)}
                     >
-                        <span className="flex-1 ms-3 whitespace-nowrap text-left">{category}</span>
+                        <span className="flex-1 ms-3 whitespace-nowrap text-left">{category.name}</span>
                     </Link>
                     </li>
                 ))}
