@@ -19,7 +19,7 @@ import Category from './Pages/Admin/Category';
 import OrdersAdmin from './Pages/Admin/Orders';
 import Users from './Pages/Admin/Users';
 import Report from './Pages/Admin/Report';
-import PaymentSuccess from './Pages/Admin/PaymentSuccess';
+import PaymentSuccess from './Pages/PaymentSuccess';
 
 const App = () => {
   return (
