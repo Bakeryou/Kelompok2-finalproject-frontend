@@ -1,4 +1,3 @@
-// DetailOrder.js
 import React from 'react';
 import { customerData, orderData } from '../data';
 import { useParams } from 'react-router-dom';
