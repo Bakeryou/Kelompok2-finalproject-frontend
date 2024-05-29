@@ -1,4 +1,3 @@
-// UpdateStock.jsx
 import { useState } from 'react';
 import { products as initialProducts } from '../../data'; 
 
