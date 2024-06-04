@@ -1,11 +1,14 @@
 import { categories } from '../../data';
 import { HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi";
 import { useState } from 'react';
+import Pagination from '../../components/Pagination';
 
 const Category = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editCategory, setEditCategory] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const categoriesPerPage = 10;
 
   const toggleEditModal = () => setShowEditModal(!showEditModal);
   const toggleAddModal = () => setShowAddModal(!showAddModal);
@@ -18,6 +21,16 @@ const Category = () => {
 
   const handleDeleteCategory = (categoryId) => {
     alert("Deleting category with ID: " + categoryId);
+  };
+
+  const totalPages = Math.ceil(categories.length / categoriesPerPage);
+
+  const indexOfLastCategory = currentPage * categoriesPerPage;
+  const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage;
+  const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -40,7 +53,7 @@ const Category = () => {
                 </tr>
               </thead>
               <tbody>
-                {categories.filter(category => category.name !== 'All').map((category, index) => (
+                {currentCategories.filter(category => category.name !== 'All').map((category, index) => (
                   <tr key={category.id}>
                     <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">{index + 1}</td>
                     <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">{category.name}</td>
@@ -57,6 +70,7 @@ const Category = () => {
               </tbody>
             </table>
           </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
         </div>
       </div>
       {/* Edit Modal */}

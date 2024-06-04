@@ -1,11 +1,14 @@
 import { products } from '../../data';
 import { HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi";
 import { useState } from 'react';
+import Pagination from '../../components/Pagination';
 
 const Products = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 4;
 
   const toggleEditModal = () => setShowEditModal(!showEditModal);
   const toggleAddModal = () => setShowAddModal(!showAddModal);
@@ -18,6 +21,16 @@ const Products = () => {
 
   const handleDeleteProduct = (productId) => {
     alert("Deleting product with ID: " + productId);
+  };
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -45,7 +58,7 @@ const Products = () => {
                 </tr>
               </thead>
               <tbody>
-                {products.map((product) => (
+                {currentProducts.map((product) => (
                   <tr key={product.id}>
                     <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
                       <img src={product.image} alt={product.name} className="h-15 w-15" />
@@ -69,6 +82,7 @@ const Products = () => {
               </tbody>
             </table>
           </div>
+          <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
         </div>
       </div>
       {/* Edit Modal */}

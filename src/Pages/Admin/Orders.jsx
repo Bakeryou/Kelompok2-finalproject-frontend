@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { orderData, customerData } from '../../data';
+import Pagination from '../../components/Pagination';
 
 const Orders = () => {
   const combinedData = orderData.map(order => {
@@ -10,6 +12,19 @@ const Orders = () => {
       customerPhoneNumber: customer?.phoneNumber || 'Unknown',
     };
   });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const ordersPerPage = 8;
+
+  const totalPages = Math.ceil(combinedData.length / ordersPerPage);
+
+  const indexOfLastOrder = currentPage * ordersPerPage;
+  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
+  const currentOrders = combinedData.slice(indexOfFirstOrder, indexOfLastOrder);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="h-screen">
@@ -62,7 +77,7 @@ const Orders = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {combinedData.map((order, index) => (
+                  {currentOrders.map((order, index) => (
                     <tr key={order.id}>
                       <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
                         {index + 1}
@@ -96,6 +111,7 @@ const Orders = () => {
                 </tbody>
               </table>
             </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
           </div>
         </div>
       </div>

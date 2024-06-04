@@ -1,6 +1,21 @@
+import { useState } from 'react';
 import { customerData } from '../../data';
+import Pagination from '../../components/Pagination';
 
 const Users = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const usersPerPage = 8;
+
+  const totalPages = Math.ceil(customerData.length / usersPerPage);
+
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = customerData.slice(indexOfFirstUser, indexOfLastUser);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="h-screen">
       <div className="px-4 mx-auto">
@@ -32,7 +47,7 @@ const Users = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {customerData.map((user, index) => (
+                  {currentUsers.map((user, index) => (
                     <tr key={user.id}>
                       <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
                         {index + 1}
@@ -57,6 +72,7 @@ const Users = () => {
                 </tbody>
               </table>
             </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
           </div>
         </div>
       </div>

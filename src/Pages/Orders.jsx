@@ -1,8 +1,23 @@
+import { useState } from 'react';
 import { orderData } from '../data';
 import { Link } from 'react-router-dom';
+import Pagination from '../components/Pagination';
 
 const Orders = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 7;
+
   const sortedOrderData = [...orderData].sort((a, b) => new Date(b.orderTime.orderedAt) - new Date(a.orderTime.orderedAt));
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = sortedOrderData.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const totalPages = Math.ceil(sortedOrderData.length / productsPerPage);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
   return (
     <div className="p-4 pt-20 h-screen">
@@ -35,7 +50,7 @@ const Orders = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {sortedOrderData.map((order) => (
+                  {currentProducts.map((order) => (
                     <tr key={order.id}>
                       <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
                         {order.id}
@@ -62,6 +77,7 @@ const Orders = () => {
                 </tbody>
               </table>
             </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
           </div>
         </div>
       </div>

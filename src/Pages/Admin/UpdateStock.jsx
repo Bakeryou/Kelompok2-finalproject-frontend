@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { products as initialProducts } from '../../data'; 
+import Pagination from '../../components/Pagination';
 
 const UpdateStock = () => {
   const [products, setProducts] = useState(initialProducts);
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 4;
 
   const handleStockChange = (productId, newStock) => {
     const updatedProducts = products.map(product => {
@@ -16,6 +19,16 @@ const UpdateStock = () => {
 
   const handleUpdateClick = () => {
     alert("Stock updated successfully!");
+  };
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+
+  const totalPages = Math.ceil(products.length / productsPerPage);
+
+  const onPageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   return (
@@ -34,7 +47,7 @@ const UpdateStock = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map((product) => (
+                  {currentProducts.map((product) => (
                     <tr key={product.id}>
                       <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
                         <img src={product.image} alt={product.name} className="h-15 w-15" />
@@ -58,6 +71,7 @@ const UpdateStock = () => {
                 </tbody>
               </table>
             </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
           </div>
         </div>
   );

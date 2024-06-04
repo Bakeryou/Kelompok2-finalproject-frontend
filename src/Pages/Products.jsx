@@ -4,12 +4,17 @@ import { HiFilter } from "react-icons/hi";
 import ProductCard from '../components/ProductCard';
 import { categories, products } from '../data';
 import { useNavigate } from 'react-router-dom';
+import Pagination from '../components/Pagination';
 
 const Products = () => {
     const [selectedCategory, setSelectedCategory] = useState('All');
+    const [productsList, setProductsList] = useState(products);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const filterButtonRef = useRef(null);
     const navigate = useNavigate();
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const productsPerPage = 8;
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -17,10 +22,26 @@ const Products = () => {
 
     const handleCategoryClick = (category) => {
         setSelectedCategory(category);
+        setCurrentPage(1);
+        if (category === 'All') {
+            setProductsList(products);
+        } else {
+            setProductsList(products.filter(product => product.category === category));
+        }
     };
 
     const handleProductClick = (product) => {
         navigate(`/productdetail/${product.id}`);
+    };
+
+    const indexOfLastProduct = currentPage * productsPerPage;
+    const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+    const currentProducts = productsList.slice(indexOfFirstProduct, indexOfLastProduct);
+
+    const totalPages = Math.ceil(productsList.length / productsPerPage);
+
+    const onPageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
     };
 
     return (
@@ -35,12 +56,13 @@ const Products = () => {
                 </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {products.map((product, index) => (
+                {currentProducts.map((product, index) => (
                     <div key={index} onClick={() => handleProductClick(product)}>
                         <ProductCard product={product} />
                     </div>
                 ))}
             </div>
+            <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
             {/* mobile menu */}
             {isMenuOpen && (
               <div className="md:hidden bg-white shadow-lg absolute left-0 rounded-md w-full" style={{ top: filterButtonRef.current?.offsetTop + filterButtonRef.current?.offsetHeight + 'px' }}>

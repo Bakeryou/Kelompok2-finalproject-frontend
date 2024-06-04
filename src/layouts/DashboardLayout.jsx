@@ -11,7 +11,7 @@ const DashboardLayout = () => {
             </div>
             <div className="flex-1 relative overflow-y-auto h-screen"> 
                 <NavbarDashboard/>
-                <main className="w-full bg-[#FFF2D7] px-7 py-5"> 
+                <main className="w-full bg-[#FFF2D7] px-7 py-5 min-h-screen"> 
                     <Outlet/>
                 </main>
                 <div className="w-full bg-contentbox">
