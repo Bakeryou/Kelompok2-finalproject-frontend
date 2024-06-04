@@ -28,7 +28,7 @@ const Cart = () => {
     const getSubtotal = () => {
         return items.reduce((acc, item) => acc + item.price * item.quantity, 0);
     };
-
+    
     return (
         <div className="p-4 pt-20 h-screen">
             {items.length === 0 ? (

@@ -2,7 +2,10 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 
-const Login = () => {
+import { connect } from "react-redux";
+import { login } from "../redux/authActions";
+
+const Login = ({ login }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
@@ -11,8 +14,10 @@ const Login = () => {
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
     const handleLogin = () => {
-        navigate("/");
-    };
+      login({ email, password });
+      navigate("/");
+  };
+    
 
     return (
         <div className="bg-bg bg-cover bg-center bg-fixed h-screen flex justify-center items-center">
@@ -48,4 +53,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default connect(null, { login })(Login);
