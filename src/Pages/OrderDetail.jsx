@@ -11,6 +11,8 @@ const OrderDetail = () => {
     return <div>Order not found</div>;
   }
 
+  const customer = customerData.find((customer) => customer.id === order.customerId);
+
   return (
     <div className="flex flex-col justify-center min-h-screen px-4">
       <div className="container mx-auto max-w-lg bg-[#FFE0B5] mt-20 my-4 p-4">
@@ -20,15 +22,15 @@ const OrderDetail = () => {
             <p className="font-semibold">No Pesanan:</p>
             <p>{order.id}</p>
             <p className="font-semibold">Name:</p>
-            <p>{customerData.name}</p>
+            <p>{customer.name}</p>
             <p className="font-semibold">Email:</p>
-            <p>{customerData.email}</p>
+            <p>{customer.email}</p>
             <p className="font-semibold">Phone Number:</p>
-            <p>{customerData.phoneNumber}</p>
+            <p>{customer.phoneNumber}</p>
             <p className="font-semibold">Alamat:</p>
-            <p>{customerData.address}</p>
+            <p>{customer.address}</p>
             <p className="font-semibold">Kode Pos:</p>
-            <p>{customerData.postalCode}</p>
+            <p>{customer.postalCode}</p>
           </div>
           <div className="mt-4">
             <h3 className="text-lg font-bold mb-2">Order Summary</h3>
