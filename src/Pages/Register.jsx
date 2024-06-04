@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
+import axios from '../axiosConfig';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../redux/authSlice';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -8,14 +11,32 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
+    const [error, setError] = useState(null);
+    const dispatch = useDispatch();
 
     const handleNameChange = (e) => setName(e.target.value);
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handleUsernameChange = (e) => setUsername(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
 
-    const handleRegister = () => {
-        navigate("/login");
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+  
+      try {
+        const response = await axios.post('/register', {
+          name,
+          email,
+          username,
+          password,
+        });
+  
+        dispatch(loginSuccess({ user: { name, email, username }, token: response.data.token }));
+  
+        // Redirect ke halaman login setelah registrasi berhasil
+        navigate('/login');
+      } catch (err) {
+        setError(err.response.data.message);
+      }
     };
 
     return (
@@ -25,7 +46,7 @@ const Register = () => {
           <h1 className="font-bold text-2xl text-black">Register</h1>
           <p className="font-normal text-black">Please complete to create an account</p>
         </div>
-        <form onSubmit={handleRegister}>
+        <form onSubmit={handleSubmit}>
           <InputField
             label="Name"
             type="text"
@@ -60,6 +81,7 @@ const Register = () => {
           <div className="mt-5">
             <p className="text-primary text-sm text-center">Already have an account? <Link to="/login" className="font-semibold underline">Login Now</Link></p>
           </div>
+          {error && <div>{error}</div>}
         </form>
       </div>
     </div>

@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../redux/authSlice';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
-    const [currentUser, setCurrentUser] = useState(null); // Ganti dengan data user yang sudah login
-    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const currentUser = useSelector(state => state.auth.user);    const navigate = useNavigate();
     const location = useLocation();
 
     const toggleMenu = () => {
@@ -19,6 +21,12 @@ const Header = () => {
     const handleNavigate = (path) => {
         navigate(path);
         setIsOpen(false);
+    };
+
+    const handleLogout = () => {
+        dispatch(logout());
+        setIsUserDropdownOpen(false);
+        navigate('/');
     };
 
     return (
@@ -49,7 +57,7 @@ const Header = () => {
                                     Home
                                 </Link>
                                 <Link
-                                    to="/products"
+                                    to="/product"
                                     className={`px-2 text-lg font-semibold rounded-xl ${location.pathname === '/products' ? 'bg-[#D8AE7E]' : 'hover:bg-[#D8AE7E]'} transition duration-150 ease-in-out`}
                                 >
                                     Products
@@ -70,7 +78,7 @@ const Header = () => {
                                     onClick={toggleUserDropdown}
                                     className="px-2 text-lg font-semibold rounded-xl hover:bg-[#D8AE7E] transition duration-150 ease-in-out flex items-center"
                                 >
-                                    {currentUser}
+                                    {currentUser.username}
                                     <svg className="w-5 h-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                                     </svg>
@@ -85,10 +93,7 @@ const Header = () => {
                                                 Orders
                                             </Link>
                                             <button
-                                                onClick={() => {
-                                                    setCurrentUser(null);
-                                                    navigate('/');
-                                                }}
+                                                onClick={handleLogout}
                                                 className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                             >
                                                 Logout
@@ -120,7 +125,7 @@ const Header = () => {
                         Home
                     </Link>
                     <Link
-                        to="/products"
+                        to="/product"
                         className={`hover:bg-[#D8AE7E] block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/products' ? 'bg-[#D8AE7E]' : ''}`}
                         onClick={() => handleNavigate('/products')}
                     >
@@ -151,10 +156,7 @@ const Header = () => {
                                 Orders
                             </Link>
                             <button
-                                onClick={() => {
-                                    setCurrentUser(null);
-                                    handleNavigate('/');
-                                }}
+                                onClick={handleLogout}
                                 className="hover:bg-[#D8AE7E] block w-full text-left px-3 py-2 rounded-md text-base font-medium"
                             >
                                 Logout
