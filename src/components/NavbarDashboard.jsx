@@ -52,11 +52,11 @@ const NavbarDashboard = () => {
                     </button>
                     {isUserMenuOpen && (
                         <div className="absolute right-0 mt-2 w-56 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                            <button className="group flex items-center w-full px-2 py-2 text-sm text-primary hover:text-gray-500 focus:outline-none" onClick={() => handleNavigate('/profile')}>
+                            <button className="group flex items-center w-full px-2 py-2 text-sm text-primary hover:text-gray-500 focus:outline-none" onClick={() => handleNavigate('/admin/profile')}>
                                 <HiOutlineUser className="w-5 h-5 mr-2" />
                                 My Profile
                             </button>
-                            <button className="group flex items-center w-full px-2 py-2 text-sm text-primary hover:text-gray-500 focus:outline-none" onClick={() => handleNavigate('/logout')}>
+                            <button className="group flex items-center w-full px-2 py-2 text-sm text-primary hover:text-gray-500 focus:outline-none" onClick={() => handleNavigate('/login')}>
                                 <HiOutlineLogout className="w-5 h-5 mr-2" />
                                 Logout
                             </button>

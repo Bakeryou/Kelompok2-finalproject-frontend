@@ -10,8 +10,8 @@ const SidebarDashboard = () => {
         { name: "Users", icon: HiOutlineUser, path: "/admin/users" },
         { name: "Orders", icon: HiOutlineClipboardList, path: "/admin/orders" },
         { name: "Report", icon: HiOutlineChartBar, margin: true, path: "/admin/report" },
-        { name: "Profile", icon: HiOutlineUser, margin: true, path: "#" },
-        { name: "Logout", icon: HiOutlineLogout, path: "/" },
+        { name: "Profile", icon: HiOutlineUser, margin: true, path: "/admin/profile" },
+        { name: "Logout", icon: HiOutlineLogout, path: "/login" },
     ];
     
     const navigate = useNavigate();
