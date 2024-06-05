@@ -5,7 +5,7 @@ const AdminRoute = () => {
   const { user, token } = useSelector((state) => state.auth);
 
   if (!token || user.role !== 'admin') {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/" replace />;
   }
   return <Outlet />;
 };

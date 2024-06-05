@@ -23,6 +23,7 @@ import Users from "../Pages/Admin/Users";
 import OrdersAdmin from "../Pages/Admin/Orders";
 import Report from "../Pages/Admin/Report";
 import ProfileAdmin from "../Pages/Admin/Profile";
+import AuthRoute from "./AuthRoute";
 
 const router = createBrowserRouter([
     {
@@ -41,11 +42,23 @@ const router = createBrowserRouter([
       children: [
         {
           path: "login",
-          element: <Login />,
+          element: <AuthRoute />,
+          children: [
+            {
+              index: true,
+              element: <Login />,
+            }
+          ],
         },
         {
           path: "register",
-          element: <Register />,
+          element: <AuthRoute />,
+          children: [
+            {
+              index: true,
+              element: <Register />,
+            }
+          ],
         },
         {
             path: "cart",

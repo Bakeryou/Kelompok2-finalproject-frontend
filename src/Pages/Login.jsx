@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import InputField from "../components/InputField";
 import { useDispatch } from 'react-redux';
 import axios from '../axiosConfig';
@@ -8,7 +8,6 @@ import { loginSuccess, loginFailure } from '../redux/authSlice';
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const [error, setError] = useState(null);
 
@@ -26,12 +25,7 @@ const Login = () => {
           const token = access_token.token;
   
           dispatch(loginSuccess({ user, token }));
-  
-          if (user.role === 'admin') {
-            navigate('/admin/updatestock');
-          } else {
-            navigate('/');
-          }
+
         } else {
           setError(data.meta.message);
           dispatch(loginFailure(data.meta.message));
