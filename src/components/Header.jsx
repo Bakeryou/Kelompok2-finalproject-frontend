@@ -7,7 +7,8 @@ const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
     const dispatch = useDispatch();
-    const currentUser = useSelector(state => state.auth.user);    const navigate = useNavigate();
+    const currentUser = useSelector(state => state.auth.user);    
+    const navigate = useNavigate();
     const location = useLocation();
 
     const toggleMenu = () => {
@@ -58,7 +59,7 @@ const Header = () => {
                                 </Link>
                                 <Link
                                     to="/product"
-                                    className={`px-2 text-lg font-semibold rounded-xl ${location.pathname === '/products' ? 'bg-[#D8AE7E]' : 'hover:bg-[#D8AE7E]'} transition duration-150 ease-in-out`}
+                                    className={`px-2 text-lg font-semibold rounded-xl ${location.pathname === '/product' ? 'bg-[#D8AE7E]' : 'hover:bg-[#D8AE7E]'} transition duration-150 ease-in-out`}
                                 >
                                     Products
                                 </Link>
@@ -127,7 +128,7 @@ const Header = () => {
                     <Link
                         to="/product"
                         className={`hover:bg-[#D8AE7E] block px-3 py-2 rounded-md text-base font-medium ${location.pathname === '/products' ? 'bg-[#D8AE7E]' : ''}`}
-                        onClick={() => handleNavigate('/products')}
+                        onClick={() => handleNavigate('/product')}
                     >
                         Products
                     </Link>

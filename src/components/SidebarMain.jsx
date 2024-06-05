@@ -20,7 +20,7 @@ const SidebarMain = () => {
                     <li key={category.id}>
                     <Link
                         to={{
-                            pathname: '/products',
+                            pathname: '/product',
                             search: category.name === 'All' ? '' : `?category=${category.name}`,
                         }}
                         className={`flex items-center w-full p-2 text-black rounded-lg hover:bg-[#D8AE7E] group ${selectedCategory === category.name ? 'bg-[#D8AE7E]' : ''}`}

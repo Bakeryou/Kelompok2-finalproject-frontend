@@ -4,7 +4,9 @@ import { useSelector } from "react-redux";
 const UserRoute = () => {
   const { user, token } = useSelector((state) => state.auth);
 
-  return token && user.role === 'user' ? <Outlet /> : <Navigate to="/login" />;
-};
+  if (!token || user.role !== 'user') {
+    return <Navigate to="/login" replace />;
+  }
+  return <Outlet />;};
 
 export default UserRoute;
