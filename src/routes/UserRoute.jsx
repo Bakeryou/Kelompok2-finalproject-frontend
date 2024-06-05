@@ -5,7 +5,7 @@ const UserRoute = () => {
   const { user, token } = useSelector((state) => state.auth);
 
   if (!token || user.role !== 'user') {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/login" replace />;
   }
   return <Outlet />;};
 
