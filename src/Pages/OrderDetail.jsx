@@ -31,6 +31,8 @@ const OrderDetail = () => {
             <p>{customer.address}</p>
             <p className="font-semibold">Kode Pos:</p>
             <p>{customer.postalCode}</p>
+            <p className="font-semibold">Kota:</p>
+            <p>{customer.city}</p>
           </div>
           <div className="mt-4">
             <h3 className="text-lg font-bold mb-2">Order Summary</h3>

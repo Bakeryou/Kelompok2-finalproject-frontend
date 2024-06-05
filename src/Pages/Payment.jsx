@@ -10,6 +10,7 @@ const Payment = () => {
         phone: "",
         address: "",
         postalCode: "",
+        city: "",
         note: "",
         orderType: "pickup"
     });
@@ -101,11 +102,20 @@ const Payment = () => {
                             />
                         </div>
                         <InputField
-                            label="Kode Pos"
+                            label="Postal Code"
                             type="text"
-                            placeholder="Kode Pos"
+                            placeholder="Postal Code"
                             name="postalCode"
                             value={formData.postalCode}
+                            onChange={handleChange}
+                            className="input"
+                        />
+                        <InputField
+                            label="City"
+                            type="text"
+                            placeholder="City"
+                            name="city"
+                            value={formData.city}
                             onChange={handleChange}
                             className="input"
                         />

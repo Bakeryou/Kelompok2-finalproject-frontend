@@ -7,6 +7,8 @@ function Profile() {
     const [username, setUsername] = useState('Admin');
     const [phoneNumber, setPhoneNumber] = useState('');
     const [address, setAddress] = useState('');
+    const [postalcode, setPostalCode] = useState('');
+    const [city, setCity] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -80,6 +82,24 @@ function Profile() {
                                 placeholder="Input your address here"
                             />
                             </div>
+                        </div>
+                        <div className="mb-4">
+                            <InputField
+                            label="Postal Code"
+                            type="text"
+                            value={postalcode}
+                            onChange={(e) => setPostalCode(e.target.value)}
+                            placeholder="Postal Code"
+                            />
+                        </div>
+                        <div className="mb-4">
+                            <InputField
+                            label="City"
+                            type="text"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            placeholder="City"
+                            />
                         </div>
                         <button
                             type="submit"

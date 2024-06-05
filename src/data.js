@@ -32,6 +32,7 @@ export const customerData = [
     phoneNumber: '123456789',
     postalCode: '12345',
     address: 'Jln. Kenangan, Surabaya Jawa Timur',
+    city: 'Surabaya',
   },
   {
     id: 2,
@@ -40,6 +41,7 @@ export const customerData = [
     phoneNumber: '987654321',
     postalCode: '54321',
     address: 'Jl. Kebahagiaan, Jakarta Selatan, DKI Jakarta',
+    city: 'Surabaya',
   },
 ];
   
