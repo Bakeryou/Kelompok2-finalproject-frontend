@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import InputField from "../components/InputField";
 import { useDispatch } from 'react-redux';
 import axios from '../axiosConfig';
-import { loginSuccess, loginFailure } from '../redux/authSlice';
+import { login } from '../redux/slices/authSlice';
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -19,20 +19,17 @@ const Login = () => {
       try {
         const response = await axios.post('/login', { email, password });
         const data = response.data;
-  
+
         if (data.meta.status === 'success') {
           const { user, access_token } = data.data;
           const token = access_token.token;
-  
-          dispatch(loginSuccess({ user, token }));
 
+          dispatch(login({ user, token }));
         } else {
           setError(data.meta.message);
-          dispatch(loginFailure(data.meta.message));
         }
       } catch (err) {
         setError(err.response?.data?.message || 'Login failed');
-        dispatch(loginFailure(err.response?.data?.message || 'Login failed'));
       }
     };
 
@@ -64,7 +61,7 @@ const Login = () => {
             <div className="mt-5">
               <p className="text-primary text-sm text-center">Don’t have an account? <Link to="/register" className="font-semibold underline">Register Now</Link></p>
             </div>
-            {error && <p>{error}</p>}
+            {error && <p className="text-red-500">{error}</p>}
           </form>
         </div>
       </div>

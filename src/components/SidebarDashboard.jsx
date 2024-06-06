@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { HiMenuAlt3, HiOutlineCube, HiOutlineCollection, HiOutlineUser, HiOutlineClipboardList, HiOutlineChartBar, HiOutlineLogout } from "react-icons/hi";
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import { logout } from '../redux/authSlice';
+import { logout } from '../redux/slices/authSlice';
 
 const SidebarDashboard = () => {
     const menus = [
@@ -13,7 +13,7 @@ const SidebarDashboard = () => {
         { name: "Orders", icon: HiOutlineClipboardList, path: "/admin/orders" },
         { name: "Report", icon: HiOutlineChartBar, margin: true, path: "/admin/report" },
         { name: "Profile", icon: HiOutlineUser, margin: true, path: "/admin/profile" },
-        { name: "Logout", icon: HiOutlineLogout, path: "/" },
+        { name: "Logout", icon: HiOutlineLogout, path: "/login" },
     ];
     
     const dispatch = useDispatch();

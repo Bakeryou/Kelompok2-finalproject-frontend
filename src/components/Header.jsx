@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../redux/authSlice';
+import { logout } from '../redux/slices/authSlice';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -73,7 +73,7 @@ const Header = () => {
                         </div>
                     </div>
                     <div className="absolute inset-y-0 right-0 items-center hidden pr-2 sm:flex sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-                        {currentUser ? (
+                        {currentUser && currentUser.username ? (
                             <div className="relative">
                                 <button
                                     onClick={toggleUserDropdown}

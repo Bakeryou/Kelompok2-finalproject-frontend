@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import axios from '../axiosConfig';
 import { useDispatch } from 'react-redux';
-import { loginSuccess } from '../redux/authSlice';
+import { register } from '../redux/slices/authSlice';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -21,7 +21,7 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
       e.preventDefault();
-  
+
       try {
         const response = await axios.post('/register', {
           name,
@@ -29,13 +29,13 @@ const Register = () => {
           username,
           password,
         });
-  
-        dispatch(loginSuccess({ user: { name, email, username }, token: response.data.token }));
-  
-        // Redirect ke halaman login setelah registrasi berhasil
+
+        dispatch(register({ user: { name, email, username }, token: response.data.token }));
+
+        // Redirect to login page after successful registration
         navigate('/login');
       } catch (err) {
-        setError(err.response.data.message);
+        setError(err.response.data.message || 'Registration failed');
       }
     };
 
@@ -81,7 +81,7 @@ const Register = () => {
           <div className="mt-5">
             <p className="text-primary text-sm text-center">Already have an account? <Link to="/login" className="font-semibold underline">Login Now</Link></p>
           </div>
-          {error && <div>{error}</div>}
+          {error && <p className="text-red-500">{error}</p>}
         </form>
       </div>
     </div>
