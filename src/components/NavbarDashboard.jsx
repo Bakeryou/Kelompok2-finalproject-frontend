@@ -1,12 +1,15 @@
 import { useState } from 'react';
 import { HiOutlineSearch, HiChevronDown, HiOutlineUser, HiOutlineLogout, HiX, HiDotsVertical } from 'react-icons/hi';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../redux/slices/authSlice';
 
 const NavbarDashboard = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const currentUser = 'Admin'; // Replace with the actual current user data
+    const dispatch = useDispatch();
+    const currentUser = useSelector(state => state.auth.user);    
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen);
@@ -20,6 +23,11 @@ const NavbarDashboard = () => {
         navigate(path);
         setIsMenuOpen(false);
         setIsUserMenuOpen(false);
+    };
+
+    const handleLogout = () => {
+        dispatch(logout());
+        navigate('/');
     };
 
     return (
@@ -47,7 +55,7 @@ const NavbarDashboard = () => {
                 {/* User Menu */}
                 <div className="relative inline-block text-left">
                     <button className="inline-flex items-center text-primary hover:text-gray-500 focus:outline-none" onClick={toggleUserMenu}>
-                        <span className="font-medium ml-3">{currentUser}</span>
+                        <span className="font-medium ml-3">{currentUser.username}</span>
                         <HiChevronDown className="w-5 h-5" />
                     </button>
                     {isUserMenuOpen && (
@@ -56,7 +64,7 @@ const NavbarDashboard = () => {
                                 <HiOutlineUser className="w-5 h-5 mr-2" />
                                 My Profile
                             </button>
-                            <button className="group flex items-center w-full px-2 py-2 text-sm text-primary hover:text-gray-500 focus:outline-none" onClick={() => handleNavigate('/login')}>
+                            <button className="group flex items-center w-full px-2 py-2 text-sm text-primary hover:text-gray-500 focus:outline-none" onClick={handleLogout}>
                                 <HiOutlineLogout className="w-5 h-5 mr-2" />
                                 Logout
                             </button>
@@ -67,12 +75,12 @@ const NavbarDashboard = () => {
 
             {/* mobile menu */}
             {isMenuOpen && (
-                <div className="block absolute top-14 left-0 bg-contentbox w-full">
-                    <button className="flex items-center text-primary hover:text-gray-500 py-2 px-3" onClick={() => handleNavigate('/profile')}>
+                <div className="block bg-white absolute top-14 left-0 bg-contentbox w-full">
+                    <button className="flex items-center text-primary hover:text-gray-500 py-2 px-3" onClick={() => handleNavigate('/admin/profile')}>
                         <HiOutlineUser className="w-6 h-6" />
                         <span className="px-2 font-bold">My Profile</span>
                     </button>
-                    <button className="flex items-center text-primary hover:text-gray-500 py-2 px-3" onClick={() => handleNavigate('/logout')}>
+                    <button className="flex items-center text-primary hover:text-gray-500 py-2 px-3" onClick={handleLogout}>
                         <HiOutlineLogout className="w-6 h-6" />
                         <span className="px-2 font-bold">Logout</span>
                     </button>
