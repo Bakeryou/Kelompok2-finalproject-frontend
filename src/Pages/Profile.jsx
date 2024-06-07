@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import InputField from '../components/InputField';
+import { useSelector } from 'react-redux';
 
 function Profile() {
-    const [name, setName] = useState('John Doe');
-    const [email, setEmail] = useState('johndoe@gmail.com');
-    const [username, setUsername] = useState('JohnDoe');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [address, setAddress] = useState('');
-    const [postalcode, setPostalCode] = useState('');
-    const [city, setCity] = useState('');
+    const user = useSelector((state) => state.auth.user);
+
+    const [name, setName] = useState(user?.name || '');
+    const [email, setEmail] = useState(user?.email || '');
+    const [username, setUsername] = useState(user?.username || '');
+    const [phoneNumber, setPhoneNumber] = useState(user?.phone_number || '');
+    const [address, setAddress] = useState(user?.address || '');
+    const [postalcode, setPostalCode] = useState(user?.postal_code || '');
+    const [city, setCity] = useState(user?.city || '');
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -58,6 +61,7 @@ function Profile() {
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             placeholder="Input your username here"
+                            disabled={true}
                             />
                         </div>
                         <div className="mb-4">
