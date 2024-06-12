@@ -1,34 +1,84 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import InputField from '../components/InputField';
-import { useSelector } from 'react-redux';
+import {
+  fetchUserData,
+  updateProfile,
+  updatePassword,
+  setName,
+  setEmail,
+  setUsername,
+  setPhoneNumber,
+  setAddress,
+  setPostalCode,
+  setCity,
+  setOldPassword,
+  setNewPassword,
+  setConfirmPassword,
+} from '../redux/slices/profileSlice';
+import { toast } from 'react-toastify';
 
-function Profile() {
-    const user = useSelector((state) => state.auth.user);
+const Profile = () => {
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const { name, email, username, phone_number, address, postal_code, city, old_password, new_password, confirm_password } =
+  useSelector((state) => state.profile);
 
-    const [name, setName] = useState(user?.name || '');
-    const [email, setEmail] = useState(user?.email || '');
-    const [username, setUsername] = useState(user?.username || '');
-    const [phoneNumber, setPhoneNumber] = useState(user?.phone_number || '');
-    const [address, setAddress] = useState(user?.address || '');
-    const [postalcode, setPostalCode] = useState(user?.postal_code || '');
-    const [city, setCity] = useState(user?.city || '');
-    const [currentPassword, setCurrentPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
+  useEffect(() => {
+    dispatch(fetchUserData(token));
+  }, [dispatch, token]);
+  
+  const handleProfileSave = (e) => {
+    e.preventDefault();
+    if (!name || !email || !address || !postal_code || !city || !phone_number) {
+        toast.error('Please fill in all required fields');
+        return;
+      }
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('email', email);
+    formData.append('address', address);
+    formData.append('postal_code', postal_code);
+    formData.append('city', city);
+    formData.append('phone_number', phone_number);
+    dispatch(updateProfile({ token, formData }))
+    .unwrap()
+    .then(() => {
+      toast.success('Profile Saved');
+    })
+    .catch((err) => {
+      toast.error(err.message);
+    });
+  };
 
-    const handleProfileSave = (e) => {
-        e.preventDefault();
-        alert('Profile Saved');
-    };
-
-    const handlePasswordSave = (e) => {
-        e.preventDefault();
-        if (newPassword !== confirmPassword) {
-            alert('Passwords do not match!');
-            return;
-        }
-        alert('Password Changed');
-    };
+  const handlePasswordSave = (e) => {
+    e.preventDefault();
+    if (!old_password || !new_password || !confirm_password) {
+        toast.error('Please fill in all password fields');
+        return;
+    }
+    if (new_password !== confirm_password) {
+        toast.error('New password and confirm password do not match');
+        return;
+    }
+    const passwordData = {
+        old_password,
+        password: new_password,
+        confirm_password,
+      };
+      dispatch(updatePassword({ token, passwordData }))
+      .unwrap()
+      .then(() => {
+        toast.success('Password Changed');
+        // Clear password fields
+        dispatch(setOldPassword(''));
+        dispatch(setNewPassword(''));
+        dispatch(setConfirmPassword(''));
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
 
     return (
         <div className="min-h-screen py-20">
@@ -41,7 +91,7 @@ function Profile() {
                             label="Name"
                             type="text"
                             value={name}
-                            onChange={(e) => setName(e.target.value)}
+                            onChange={(e) => dispatch(setName(e.target.value))}
                             placeholder="Input your name here"
                             />
                         </div>
@@ -50,7 +100,7 @@ function Profile() {
                             label="Email"
                             type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => dispatch(setEmail(e.target.value))}
                             placeholder="Input your email here"
                             />
                         </div>
@@ -59,7 +109,7 @@ function Profile() {
                             label="Username"
                             type="text"
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            onChange={(e) => dispatch(setUsername(e.target.value))}
                             placeholder="Input your username here"
                             disabled={true}
                             />
@@ -68,8 +118,8 @@ function Profile() {
                             <InputField
                             label="Phone Number"
                             type="text"
-                            value={phoneNumber}
-                            onChange={(e) => setPhoneNumber(e.target.value)}
+                            value={phone_number}
+                            onChange={(e) => dispatch(setPhoneNumber(e.target.value))}
                             placeholder="Input your phone number here"
                             />
                         </div>
@@ -81,7 +131,7 @@ function Profile() {
                             <textarea
                                 type="text"
                                 value={address}
-                                onChange={(e) => setAddress(e.target.value)}
+                                onChange={(e) => dispatch(setAddress(e.target.value))}
                                 className="input"
                                 placeholder="Input your address here"
                             />
@@ -91,8 +141,8 @@ function Profile() {
                             <InputField
                             label="Postal Code"
                             type="text"
-                            value={postalcode}
-                            onChange={(e) => setPostalCode(e.target.value)}
+                            value={postal_code}
+                            onChange={(e) => dispatch(setPostalCode(e.target.value))}
                             placeholder="Postal Code"
                             />
                         </div>
@@ -101,7 +151,7 @@ function Profile() {
                             label="City"
                             type="text"
                             value={city}
-                            onChange={(e) => setCity(e.target.value)}
+                            onChange={(e) => dispatch(setCity(e.target.value))}
                             placeholder="City"
                             />
                         </div>
@@ -120,8 +170,8 @@ function Profile() {
                             <InputField
                             label="Current Password"
                             type="password"
-                            value={currentPassword}
-                            onChange={(e) => setCurrentPassword(e.target.value)}
+                            name="currentPassword"
+                            onChange={(e) => dispatch(setOldPassword(e.target.value))}
                             placeholder="Input your current password here"
                             />
                         </div>
@@ -129,8 +179,8 @@ function Profile() {
                             <InputField
                             label="New Password"
                             type="password"
-                            value={newPassword}
-                            onChange={(e) => setNewPassword(e.target.value)}
+                            name="newPassword"
+                            onChange={(e) => dispatch(setNewPassword(e.target.value))}
                             placeholder="Input your new password here"
                             />
                         </div>
@@ -138,8 +188,8 @@ function Profile() {
                             <InputField
                             label="Confirm Password"
                             type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
+                            name="confirmPassword"
+                            onChange={(e) => dispatch(setConfirmPassword(e.target.value))}
                             placeholder="Confirm your new password here"
                             />
                         </div>
