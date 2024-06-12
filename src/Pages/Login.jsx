@@ -3,13 +3,13 @@ import { Link } from "react-router-dom";
 import InputField from "../components/InputField";
 import { useDispatch } from 'react-redux';
 import axios from '../axiosConfig';
-import { login } from '../redux/slices/authSlice';
+import { login, setError } from '../redux/slices/authSlice';
+import { toast } from "react-toastify";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const dispatch = useDispatch();
-    const [error, setError] = useState(null);
 
     const handleEmailChange = (e) => setEmail(e.target.value);
     const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -23,13 +23,14 @@ const Login = () => {
         if (data.meta.status === 'success') {
           const { user, access_token } = data.data;
           const token = access_token.token;
-
+  
           dispatch(login({ user, token }));
+          toast.success('Login successful!');
         } else {
-          setError(data.meta.message);
+          dispatch(setError(data.meta.message));
         }
       } catch (err) {
-        setError(err.response?.data?.message || 'Login failed');
+        dispatch(setError(err.response?.data?.message || 'Login failed'));
       }
     };
 
@@ -61,7 +62,6 @@ const Login = () => {
             <div className="mt-5">
               <p className="text-primary text-sm text-center">Don’t have an account? <Link to="/register" className="font-semibold underline">Register Now</Link></p>
             </div>
-            {error && <p className="text-red-500">{error}</p>}
           </form>
         </div>
       </div>

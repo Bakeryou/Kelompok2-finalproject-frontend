@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import InputField from "../components/InputField";
 import axios from '../axiosConfig';
 import { useDispatch } from 'react-redux';
-import { register } from '../redux/slices/authSlice';
+import { register, setError } from '../redux/slices/authSlice';
+import { toast } from "react-toastify";
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -11,7 +12,6 @@ const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const [error, setError] = useState(null);
     const dispatch = useDispatch();
 
     const handleNameChange = (e) => setName(e.target.value);
@@ -31,11 +31,12 @@ const Register = () => {
         });
 
         dispatch(register({ user: { name, email, username }, token: response.data.token }));
+        toast.success('Registration successful!');
 
         // Redirect to login page after successful registration
         navigate('/login');
       } catch (err) {
-        setError(err.response.data.message || 'Registration failed');
+        dispatch(setError(err.response.data.message || 'Registration failed'));
       }
     };
 
@@ -81,7 +82,6 @@ const Register = () => {
           <div className="mt-5">
             <p className="text-primary text-sm text-center">Already have an account? <Link to="/login" className="font-semibold underline">Login Now</Link></p>
           </div>
-          {error && <p className="text-red-500">{error}</p>}
         </form>
       </div>
     </div>

@@ -1,8 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { toast } from 'react-toastify';
 
 const initialState = {
   user: null,
-  token: null,
+  token: localStorage.getItem('token') || null,
+  error: null,
 };
 
 const authSlice = createSlice({
@@ -12,17 +14,27 @@ const authSlice = createSlice({
     login: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
+      localStorage.setItem('token', action.payload.token);
+      state.error = null;
     },
     register: (state, action) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
+      localStorage.setItem('token', action.payload.token);
+      state.error = null;
     },
     logout: (state) => {
       state.user = null;
       state.token = null;
+      localStorage.removeItem('token');
+      state.error = null;
+    },
+    setError: (state, action) => {
+      state.error = action.payload;
+      toast.error(action.payload);
     },
   },
 });
 
-export const { login, register, logout } = authSlice.actions;
+export const { login, register, logout, setError } = authSlice.actions;
 export default authSlice.reducer;
