@@ -48,6 +48,7 @@ const Login = () => {
               placeholder="Input your email here"
               value={email}
               onChange={handleEmailChange}
+              required={true}
             />
             <InputField
               label="Password"
@@ -55,6 +56,7 @@ const Login = () => {
               placeholder="Input your password here"
               value={password}
               onChange={handlePasswordChange}
+              required={true}
             />
             <div className="mt-5">
               <button type="submit" className="w-full py-3 btn btn-secondary">Login</button>

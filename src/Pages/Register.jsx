@@ -54,6 +54,7 @@ const Register = () => {
             placeholder="Input your name here"
             value={name}
             onChange={handleNameChange}
+            required={true}
           />
           <InputField
             label="Email"
@@ -61,6 +62,7 @@ const Register = () => {
             placeholder="Input your email here"
             value={email}
             onChange={handleEmailChange}
+            required={true}
           />
           <InputField
             label="Username"
@@ -68,6 +70,7 @@ const Register = () => {
             placeholder="Input your username here"
             value={username}
             onChange={handleUsernameChange}
+            required={true}
           />
           <InputField
             label="Password"
@@ -75,6 +78,7 @@ const Register = () => {
             placeholder="Input your password here"
             value={password}
             onChange={handlePasswordChange}
+            required={true}
           />
           <div className="mt-5">
             <button type="submit" className="w-full py-3 btn btn-secondary">Register</button>
