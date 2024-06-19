@@ -70,7 +70,7 @@ const ProductDetail = () => {
                 <div className="md:w-1/2 md:pl-4 w-full">
                     <h2 className="text-2xl font-bold mb-2 md:mt-0 text-center md:text-left">{product.name}</h2>
                     <div className="flex justify-between">
-                        <p className="text-lg font-semibold mb-2">Rp. {product.price. toLocaleString()}</p>
+                        <p className="text-lg font-semibold mb-2">Rp. {product.price.toLocaleString()}</p>
                         <p className="text-lg font-semibold mb-2">Stock: {product.stock}</p>
                     </div>
                     <p className="mb-4 text-center md:text-left">{product.description}</p>

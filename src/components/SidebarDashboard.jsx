@@ -3,6 +3,7 @@ import { HiMenuAlt3, HiOutlineCollection, HiOutlineUser, HiOutlineClipboardList,
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { logout } from '../redux/slices/authSlice';
+import { resetProfile } from "../redux/slices/profileSlice";
 
 const SidebarDashboard = () => {
     const menus = [
@@ -37,6 +38,7 @@ const SidebarDashboard = () => {
 
     const handleLogout = () => {
         dispatch(logout());
+        dispatch(resetProfile());
     };
 
     return (

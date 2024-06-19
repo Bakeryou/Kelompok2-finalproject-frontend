@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { HiEyeOff, HiEye } from "react-icons/hi";
 
-const InputField = ({ label, type, placeholder, value, onChange, disabled, required }) => {
+const InputField = ({ label, type, placeholder, value, onChange, disabled, required, name }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePassword = () => {
@@ -17,6 +17,7 @@ const InputField = ({ label, type, placeholder, value, onChange, disabled, requi
           placeholder={placeholder}
           value={value}
           onChange={onChange}
+          name={name}
           disabled={disabled}
           className={`input ${disabled ? 'disabled:bg-[#FFE0B5]' : ''}`}
           required={required}

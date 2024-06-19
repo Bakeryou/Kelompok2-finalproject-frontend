@@ -3,6 +3,7 @@ import { HiOutlineSearch, HiChevronDown, HiOutlineUser, HiOutlineLogout, HiX, Hi
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../redux/slices/authSlice';
+import { resetProfile } from '../redux/slices/profileSlice';
 
 const NavbarDashboard = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,6 +28,7 @@ const NavbarDashboard = () => {
 
     const handleLogout = () => {
         dispatch(logout());
+        dispatch(resetProfile());
         navigate('/');
     };
 

@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
+import { resetProfile } from '../redux/slices/profileSlice';
+import { resetCart } from '../redux/slices/cartSlice';
 
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +28,8 @@ const Header = () => {
 
     const handleLogout = () => {
         dispatch(logout());
+        dispatch(resetProfile());
+        dispatch(resetCart());
         setIsUserDropdownOpen(false);
         navigate('/');
     };
