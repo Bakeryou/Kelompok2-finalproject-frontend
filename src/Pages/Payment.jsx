@@ -1,19 +1,49 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import InputField from "../components/InputField.jsx";
-import { cartItems } from '../data.js';
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart, resetCart } from "../redux/slices/cartSlice.js";
+import { fetchUserData } from "../redux/slices/profileSlice.js";
+import { checkoutOrder } from "../redux/slices/orderSlice.js";
+import { toast } from "react-toastify";
 
 const Payment = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { token } = useSelector((state) => state.auth);
+    const cart = useSelector((state) => state.cart.items);
+    const products = useSelector((state) => state.productUser.products);
+    const profile = useSelector((state) => state.profile);
+
     const [formData, setFormData] = useState({
-        name: "",
-        email: "",
-        phone: "",
-        address: "",
-        postalCode: "",
-        city: "",
-        note: "",
-        orderType: "pickup"
-    });
+        name: '',
+        email: '',
+        phone_number: '',
+        address: '',
+        postal_code: '',
+        city: '',
+        notes: '',
+        order_type: 'pickup',
+      });
+
+    useEffect(() => {
+        dispatch(fetchCart());
+        dispatch(fetchUserData(token));
+  }, [dispatch, token]);
+
+    useEffect(() => {
+        if (profile) {
+            setFormData((prevFormData) => ({
+                ...prevFormData,
+                name: profile.name,
+                email: profile.email,
+                phone_number: profile.phone_number,
+                address: profile.address,
+                postal_code: profile.postal_code,
+                city: profile.city,
+            }));
+        }
+    }, [profile]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -26,14 +56,42 @@ const Payment = () => {
     const handleOrderTypeChange = (e) => {
         setFormData({
             ...formData,
-            orderType: e.target.value
+            order_type: e.target.value
         });
     };
 
-    const subtotal = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-    const tax = 3000;
-    const shipping = 10000;
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const tax = subtotal * 0.1; // 10% tax
+    const shipping = formData.order_type === "pickup" ? 0 : (cart.total_weight > 1000 ? 25000 : 15000); // shipping cost based on weight
     const total = subtotal + tax + shipping;
+
+    const handleCheckout = () => {
+        // Proses pembuatan order
+        const orderData = {
+          order_type: formData.order_type,
+          customer_name: formData.name,
+          customer_email: formData.email,
+          customer_phone: formData.phone_number,
+          customer_address: formData.address,
+          customer_postal_code: formData.postal_code,
+          customer_city: formData.city,
+          notes: formData.notes,
+          subtotal: subtotal,
+          tax: tax,
+          shipping: shipping,
+          total: total,
+        };
+    
+        dispatch(checkoutOrder(orderData))
+          .then(() => {
+            dispatch(resetCart()); // Reset cart setelah berhasil checkout
+            toast.success('Order berhasil dibuat!');
+            navigate('/paymentsuccess'); // Redirect ke halaman success setelah berhasil checkout
+          })
+          .catch((error) => {
+            toast.error(`Terjadi kesalahan: ${error.message}`);
+          });
+      };
 
     return (
         <div className="p-4 py-20 min-h-screen">
@@ -44,9 +102,9 @@ const Payment = () => {
                         <input 
                             type="radio" 
                             id="pickup" 
-                            name="orderType" 
+                            name="order_type" 
                             value="pickup" 
-                            checked={formData.orderType === "pickup"} 
+                            checked={formData.order_type === "pickup"} 
                             onChange={handleOrderTypeChange} 
                         />
                         <label htmlFor="pickup" className="ml-2">Pickup</label>
@@ -55,9 +113,9 @@ const Payment = () => {
                         <input 
                             type="radio" 
                             id="delivery" 
-                            name="orderType" 
+                            name="order_type" 
                             value="delivery" 
-                            checked={formData.orderType === "delivery"} 
+                            checked={formData.order_type === "delivery"} 
                             onChange={handleOrderTypeChange} 
                         />
                         <label htmlFor="delivery" className="ml-2">Delivery</label>
@@ -84,10 +142,10 @@ const Payment = () => {
                         />
                         <InputField
                             label="Phone Number"
-                            type="tel"
+                            type="text"
                             placeholder="Input your phone number here"
-                            name="phone"
-                            value={formData.phone}
+                            name="phone_number"
+                            value={formData.phone_number}
                             onChange={handleChange}
                             className="input"
                         />
@@ -105,8 +163,8 @@ const Payment = () => {
                             label="Postal Code"
                             type="text"
                             placeholder="Postal Code"
-                            name="postalCode"
-                            value={formData.postalCode}
+                            name="postal_code"
+                            value={formData.postal_code}
                             onChange={handleChange}
                             className="input"
                         />
@@ -122,10 +180,10 @@ const Payment = () => {
                         <div className="flex flex-col gap-2 mt-2">
                             <label className="font-medium text-primary">Note</label>
                             <textarea
-                                name="note"
+                                name="notes"
                                 className="input"
                                 placeholder="Notes (optional)"
-                                value={formData.note}
+                                value={formData.notes}
                                 onChange={handleChange}
                             />
                         </div>
@@ -134,10 +192,10 @@ const Payment = () => {
                 <div className="w-full lg:w-1/2 ml-0 md:ml-4">
                     <h2 className="text-2xl text-center font-bold mb-4">Order Summary</h2>
                     <hr className="my-4 border-b border-black" />
-                    {cartItems.map((item, index) => (
-                        <div key={index} className="flex justify-between mb-2">
-                            <p>{item.name}</p>
-                            <p>Rp. {(item.price * item.quantity).toLocaleString()} - {item.quantity}x</p>
+                    {cart.map((cartItem) => (
+                        <div key={cartItem.id} className="flex justify-between mb-2">
+                            <p>{products.find(p => p.id === cartItem.product_id).name}</p>
+                            <p>Rp. {(cartItem.total_price).toLocaleString()} - {cartItem.qty}x</p>
                         </div>
                     ))}
                     <hr className="my-4 border-b border-black" />
@@ -157,9 +215,9 @@ const Payment = () => {
                         <p>Total</p>
                         <p>Rp. {total.toLocaleString()}</p>
                     </div>
-                    <Link to="/paymentsuccess">
-                        <button className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-secondary mt-4">Pay Now</button>
-                    </Link>
+                    {/* <Link to="/paymentsuccess"> */}
+                        <button onClick={handleCheckout} className="w-full bg-primary text-white py-2 px-4 rounded-md hover:bg-secondary mt-4">Pay Now</button>
+                    {/* </Link> */}
                 </div>
             </div>
         </div>

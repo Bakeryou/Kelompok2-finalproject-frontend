@@ -3,10 +3,14 @@ import { HiMinusSm, HiPlusSm } from "react-icons/hi";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts } from '../redux/slices/productUserSlice';
+import { toast } from 'react-toastify';
+import { addToCart } from '../redux/slices/cartSlice';
 
 const ProductDetail = () => {
     const { id } = useParams();
+    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
     const products = useSelector((state) => state.productUser.products);
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -32,6 +36,27 @@ const ProductDetail = () => {
         setQuantity(quantity + 1);
     };
 
+    const handleAddToCart = () => {
+        if (!token) {
+            toast.error('Silakan login terlebih dahulu.');
+            navigate('/login');
+            return;
+        }
+
+        if (product.stock <= 0) {
+            toast.error('Produk ini sudah habis.');
+            return;
+        }
+
+        dispatch(addToCart({ product_id: product.id, qty: quantity }))
+            .then(() => {
+                toast.success('Produk berhasil ditambahkan ke keranjang!');
+            })
+            .catch(() => {
+                toast.error('Terjadi kesalahan. Silakan coba lagi.');
+            });
+    };
+
     if (!product) {
         return <p>Loading...</p>;
     }
@@ -54,7 +79,7 @@ const ProductDetail = () => {
                         <p className="text-xl px-2">{quantity}</p>
                         <button onClick={increaseQuantity} className="bg-[#FFE0B5] px-3 py-2 rounded-md hover:bg-[#eab162]"><HiPlusSm size={20} /></button>
                     </div>
-                    <button className="w-full bg-secondary text-white py-2 px-4 rounded-md hover:bg-hover mx-auto md:mx-0 block">Add To Cart</button>
+                    <button onClick={handleAddToCart} className="w-full bg-secondary text-white py-2 px-4 rounded-md hover:bg-hover mx-auto md:mx-0 block">Add To Cart</button>
                 </div>
             </div>
         </div>

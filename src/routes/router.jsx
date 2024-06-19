@@ -60,12 +60,24 @@ const router = createBrowserRouter([
           ],
         },
         {
-            path: "cart",
-            element: <Cart />,
+          path: "cart",
+          element: <UserRoute />,
+          children: [
+            {
+              index: true,
+              element: <Cart />,
+            }
+          ],
         },
         {
-            path: "payment",
-            element: <Payment />,
+          path: "payment",
+          element: <UserRoute />,
+          children: [
+            {
+              index: true,
+              element: <Payment />,
+            }
+          ],
         },
         {
           path: "profile",
