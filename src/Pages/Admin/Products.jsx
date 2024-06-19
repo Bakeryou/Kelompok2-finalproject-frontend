@@ -1,38 +1,118 @@
-import { products } from '../../data';
-import { HiOutlinePencilAlt, HiOutlineTrash } from "react-icons/hi";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchProducts,
+  addProduct,
+  updateProduct,
+  deleteProduct,
+} from '../../redux/slices/productSlice';
+import { fetchCategories } from '../../redux/slices/categorySlice';
+import { HiOutlinePencilAlt, HiOutlineTrash } from 'react-icons/hi';
 import Pagination from '../../components/Pagination';
 
 const Products = () => {
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const { products } = useSelector((state) => state.product);
+  const { categories } = useSelector((state) => state.category);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 4;
+  const productsPerPage = 10;
+
+   // State for each product attribute
+   const [newName, setNewName] = useState('');
+   const [newPrice, setNewPrice] = useState('');
+   const [newStock, setNewStock] = useState('');
+   const [newWeight, setNewWeight] = useState('');
+   const [newDescription, setNewDescription] = useState('');
+   const [newCategoryId, setNewCategoryId] = useState(null);
+   const [newImage, setNewImage] = useState(null);
+
+  useEffect(() => {
+    dispatch(fetchProducts(token));
+    dispatch(fetchCategories(token));
+  }, [dispatch, token]);
 
   const toggleEditModal = () => setShowEditModal(!showEditModal);
-  const toggleAddModal = () => setShowAddModal(!showAddModal);
-
+  const toggleAddModal = () => {
+    setNewName('');
+    setNewPrice('');
+    setNewStock('');
+    setNewWeight('');
+    setNewDescription('');
+    setNewCategoryId('');
+    setNewImage(null);
+    setShowAddModal(!showAddModal);
+  };
   const handleEditProduct = (productId) => {
-    const productToEdit = products.find(product => product.id === productId);
+    const productToEdit = products.find((product) => product.id === productId);
     setEditProduct(productToEdit);
+    setNewName(productToEdit.name);
+    setNewPrice(productToEdit.price);
+    setNewStock(productToEdit.stock);
+    setNewWeight(productToEdit.weight);
+    setNewDescription(productToEdit.description);
+    setNewCategoryId(productToEdit.category_id);
     toggleEditModal();
   };
 
-  const handleDeleteProduct = (productId) => {
-    alert("Deleting product with ID: " + productId);
+  const handleDeleteProduct = async (productId) => {
+    dispatch(deleteProduct(productId, token));
   };
 
+  const handleAddProduct = (event) => {
+    event.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name', newName);
+    formData.append('price', newPrice);
+    formData.append('stock', newStock);
+    formData.append('weight', newWeight);
+    formData.append('description', newDescription);
+    formData.append('category_id', newCategoryId);
+    formData.append('image', newImage);
+
+    dispatch(addProduct(formData, token)).then(() => {
+      dispatch(fetchProducts(token));
+    });
+    event.target.reset();
+    toggleAddModal();
+  };
+  
+
+  const handleUpdateProduct = (e) => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append('name', newName);
+    formData.append('price', newPrice);
+    formData.append('stock', newStock);
+    formData.append('weight', newWeight);
+    formData.append('description', newDescription);
+    formData.append('category_id', newCategoryId);
+
+    // Check if a new image was uploaded
+    if (newImage) {
+      formData.append('image', newImage);
+    }
+
+    dispatch(updateProduct({ id: editProduct.id, updatedData: formData, token })).then(() => {
+      dispatch(fetchProducts(token));
+    });
+    toggleEditModal();
+  };
+  
+  const totalPages = Math.ceil(products.length / productsPerPage);
+  
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
-
-  const totalPages = Math.ceil(products.length / productsPerPage);
-
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);  
   const onPageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
-
+  
   return (
     <div>
       <div className="flex justify-between items-center mb-4">
@@ -45,7 +125,7 @@ const Products = () => {
         <div className="w-full">
           <div className="max-w-full overflow-x-auto">
             <table className="w-full table-auto">
-            <thead className="bg-[#D8AE7E] text-center">
+              <thead className="bg-[#D8AE7E] text-center">
                 <tr>
                   <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">Image</th>
                   <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">Product Name</th>
@@ -61,10 +141,10 @@ const Products = () => {
                 {currentProducts.map((product) => (
                   <tr key={product.id}>
                     <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
-                      <img src={product.image} alt={product.name} className="h-15 w-15" />
+                      <img src={product.image_url} alt={product.name} className="h-15 w-15" />
                     </td>
                     <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-2 dark:text-dark-7">{product.name}</td>
-                    <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">{product.category}</td>
+                    <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">{categories.find((category) => category.id === product.category_id)?.name}</td>
                     <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">Rp. {product.price.toLocaleString()}</td>
                     <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">{product.stock}</td>
                     <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">{product.description}</td>
@@ -85,52 +165,52 @@ const Products = () => {
           <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={onPageChange} />
         </div>
       </div>
+  
       {/* Edit Modal */}
       {showEditModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="relative w-full max-w-lg max-h-full overflow-y-auto bg-white p-8 rounded-lg mx-4">
             <button onClick={toggleEditModal} className="absolute top-2 right-2 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center">
               <svg className="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
               </svg>
               <span className="sr-only">Close modal</span>
             </button>
             <h3 className="text-lg font-semibold mb-4">Edit Product</h3>
-            <form>
+            <form onSubmit={(e) => handleUpdateProduct(e)}>
               <div className="grid gap-4 mb-4 grid-cols-2">
                 <div className="col-span-2">
-                  <label htmlFor="edit-name" className="block mb-2 text-sm font-medium">Name</label>
-                  <input type="text" id="edit-name" defaultValue={editProduct.name} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product name" required />
+                  <label htmlFor="editName" className="block mb-2 text-sm font-medium">Name</label>
+                  <input type="text" id="editName" value={newName} onChange={(e) => setNewName(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product name" required />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label htmlFor="edit-price" className="block mb-2 text-sm font-medium">Price</label>
-                  <input type="number" id="edit-price" defaultValue={editProduct.price} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Price" required />
+                  <label htmlFor="editPrice" className="block mb-2 text-sm font-medium">Price</label>
+                  <input type="number" id="editPrice" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Price" required />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label htmlFor="edit-category" className="block mb-2 text-sm font-medium">Category</label>
-                  <select id="edit-category" defaultValue={editProduct.category} className="block w-full p-2.5 text-sm border rounded-lg" required>
+                  <label htmlFor="editCategory" className="block mb-2 text-sm font-medium">Category</label>
+                  <select id="editCategory" value={newCategoryId} onChange={(e) => setNewCategoryId(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" required>
                     <option value="">Select category</option>
-                    <option value="Bread">Bread</option>
-                    <option value="Pastry">Pastry</option>
-                    <option value="Donut">Donut</option>
-                    <option value="Cookies">Cookies</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label htmlFor="edit-stock" className="block mb-2 text-sm font-medium">Stock</label>
-                  <input type="number" id="edit-stock" defaultValue={editProduct.stock} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Stock" required />
+                  <label htmlFor="editStock" className="block mb-2 text-sm font-medium">Stock</label>
+                  <input type="number" id="editStock" value={newStock} onChange={(e) => setNewStock(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Stock" required />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label htmlFor="edit-weight" className="block mb-2 text-sm font-medium">Weight (grams)</label>
-                  <input type="number" id="edit-weight" defaultValue={editProduct.weight} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product weight in grams" required />
+                  <label htmlFor="editWeight" className="block mb-2 text-sm font-medium">Weight (grams)</label>
+                  <input type="number" id="editWeight" value={newWeight} onChange={(e) => setNewWeight(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product weight in grams" required />
                 </div>
                 <div className="col-span-2">
-                  <label htmlFor="edit-image" className="block mb-2 text-sm font-medium">Image</label>
-                  <input type="file" id="edit-image" className="block w-full p-2.5 text-sm border rounded-lg" />
+                  <label htmlFor="editImage" className="block mb-2 text-sm font-medium">Image</label>
+                  <input type="file" id="editImage" onChange={(e) => setNewImage(e.target.files[0])} className="block w-full p-2.5 text-sm border rounded-lg" />
                 </div>
                 <div className="col-span-2">
-                  <label htmlFor="edit-description" className="block mb-2 text-sm font-medium">Description</label>
-                  <textarea id="edit-description" defaultValue={editProduct.description} rows="4" className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product description"></textarea>
+                  <label htmlFor="editDescription" className="block mb-2 text-sm font-medium">Description</label>
+                  <textarea id="editDescription" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} rows="4" className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product description"></textarea>
                 </div>
               </div>
               <button type="submit" className="btn btn-secondary py-2 px-4">Update Product</button>
@@ -138,52 +218,52 @@ const Products = () => {
           </div>
         </div>
       )}
+
       {/* Add Modal */}
       {showAddModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="relative w-full max-w-lg max-h-full overflow-y-auto bg-white p-8 rounded-lg mx-4">
             <button onClick={toggleAddModal} className="absolute top-2 right-2 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center">
               <svg className="w-3 h-3" aria-hidden="true" fill="none" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
               </svg>
               <span className="sr-only">Close modal</span>
             </button>
             <h3 className="text-lg font-semibold mb-4">Create New Product</h3>
-            <form>
+            <form onSubmit={(e) => handleAddProduct(e)}>
               <div className="grid gap-4 mb-4 grid-cols-2">
                 <div className="col-span-2">
-                  <label htmlFor="add-name" className="block mb-2 text-sm font-medium">Name</label>
-                  <input type="text" id="add-name" className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product name" required />
+                  <label htmlFor="addName" className="block mb-2 text-sm font-medium">Name</label>
+                  <input type="text" id="addName" value={newName} onChange={(e) => setNewName(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product name" required />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label htmlFor="add-price" className="block mb-2 text-sm font-medium">Price</label>
-                  <input type="number" id="add-price" className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Price" required />
+                  <label htmlFor="addPrice" className="block mb-2 text-sm font-medium">Price</label>
+                  <input type="number" id="addPrice" value={newPrice} onChange={(e) => setNewPrice(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Price" required />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label htmlFor="add-category" className="block mb-2 text-sm font-medium">Category</label>
-                  <select id="add-category" className="block w-full p-2.5 text-sm border rounded-lg" required>
+                  <label htmlFor="addCategory" className="block mb-2 text-sm font-medium">Category</label>
+                  <select id="addCategory" value={newCategoryId} onChange={(e) => setNewCategoryId(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" required>
                     <option value="">Select category</option>
-                    <option value="Bread">Bread</option>
-                    <option value="Pastry">Pastry</option>
-                    <option value="Donut">Donut</option>
-                    <option value="Cookies">Cookies</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label htmlFor="add-stock" className="block mb-2 text-sm font-medium">Stock</label>
-                  <input type="number" id="add-stock" className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Stock" required />
+                  <label htmlFor="addStock" className="block mb-2 text-sm font-medium">Stock</label>
+                  <input type="number" id="addStock" value={newStock} onChange={(e) => setNewStock(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Stock" required />
                 </div>
                 <div className="col-span-2 sm:col-span-1">
-                  <label htmlFor="edit-weight" className="block mb-2 text-sm font-medium">Weight (grams)</label>
-                  <input type="number" id="edit-weight" className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product weight" required />
+                  <label htmlFor="addWeight" className="block mb-2 text-sm font-medium">Weight (grams)</label>
+                  <input type="number" id="addWeight" value={newWeight} onChange={(e) => setNewWeight(e.target.value)} className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product weight" required />
                 </div>
                 <div className="col-span-2">
-                  <label htmlFor="add-image" className="block mb-2 text-sm font-medium">Image</label>
-                  <input type="file" id="add-image" className="block w-full p-2.5 text-sm border rounded-lg" />
+                  <label htmlFor="addImage" className="block mb-2 text-sm font-medium">Image</label>
+                  <input type="file" id="addImage" onChange={(e) => setNewImage(e.target.files[0])} className="block w-full p-2.5 text-sm border rounded-lg" required />
                 </div>
                 <div className="col-span-2">
-                  <label htmlFor="add-description" className="block mb-2 text-sm font-medium">Description</label>
-                  <textarea id="add-description" rows="4" className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product description"></textarea>
+                  <label htmlFor="addDescription" className="block mb-2 text-sm font-medium">Description</label>
+                  <textarea id="addDescription" value={newDescription} onChange={(e) => setNewDescription(e.target.value)} rows="4" className="block w-full p-2.5 text-sm border rounded-lg" placeholder="Product description" required></textarea>
                 </div>
               </div>
               <button type="submit" className="btn btn-secondary py-2 px-4">Add Product</button>
@@ -191,8 +271,8 @@ const Products = () => {
           </div>
         </div>
       )}
-    </div>
-  );
-}
+      </div>
+    );
+  };
 
 export default Products;

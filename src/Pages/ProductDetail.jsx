@@ -1,17 +1,26 @@
 import { useEffect, useState } from 'react';
 import { HiMinusSm, HiPlusSm } from "react-icons/hi";
-import { useParams } from 'react-router-dom';
-import { products } from '../data';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProducts } from '../redux/slices/productUserSlice';
 
 const ProductDetail = () => {
     const { id } = useParams();
+    const dispatch = useDispatch();
+    const products = useSelector((state) => state.productUser.products);
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
+        if (products.length === 0) {
+            dispatch(fetchProducts()); // Ambil produk jika belum ada di Redux store
+        }
+    }, [dispatch, products.length]);
+
+    useEffect(() => {
         const selectedProduct = products.find(p => p.id === parseInt(id));
         setProduct(selectedProduct);
-    }, [id]);
+    }, [id, products]);
 
     const decreaseQuantity = () => {
         if (quantity > 1) {
@@ -31,12 +40,12 @@ const ProductDetail = () => {
         <div className="p-4 pt-20">
             <div className="flex flex-col md:flex-row items-center">
                 <div className="md:w-1/2 mb-4 md:mb-0">
-                    <img src={product.image} alt={product.name} className="w-full h-96 md:h-full object-cover rounded-lg" />
+                    <img src={product.image_url} alt={product.name} className="w-full h-96 md:h-full object-cover rounded-lg" />
                 </div>
                 <div className="md:w-1/2 md:pl-4 w-full">
                     <h2 className="text-2xl font-bold mb-2 md:mt-0 text-center md:text-left">{product.name}</h2>
                     <div className="flex justify-between">
-                        <p className="text-lg font-semibold mb-2">Rp. {product.price}</p>
+                        <p className="text-lg font-semibold mb-2">Rp. {product.price. toLocaleString()}</p>
                         <p className="text-lg font-semibold mb-2">Stock: {product.stock}</p>
                     </div>
                     <p className="mb-4 text-center md:text-left">{product.description}</p>
