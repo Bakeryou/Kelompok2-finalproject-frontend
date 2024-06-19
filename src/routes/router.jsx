@@ -15,7 +15,6 @@ import ProductLayout from "../layouts/ProductLayout";
 import Product from "../Pages/Products";
 import AdminRoute from "./AdminRoute";
 import DashboardLayout from "../layouts/DashboardLayout";
-import UpdateStock from "../Pages/Admin/UpdateStock";
 import Products from "../Pages/Admin/Products";
 import ProductDetail from "../Pages/ProductDetail";
 import Category from "../Pages/Admin/Category";
@@ -132,10 +131,6 @@ const router = createBrowserRouter([
           path: "",
           element: <DashboardLayout />,
           children: [
-            {
-              path: "updatestock",
-              element: <UpdateStock />,
-            },
             {
               path: "products",
               element: <Products />,

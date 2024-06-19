@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { HiMenuAlt3, HiOutlineCube, HiOutlineCollection, HiOutlineUser, HiOutlineClipboardList, HiOutlineChartBar, HiOutlineLogout } from "react-icons/hi";
+import { HiMenuAlt3, HiOutlineCollection, HiOutlineUser, HiOutlineClipboardList, HiOutlineChartBar, HiOutlineLogout } from "react-icons/hi";
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { logout } from '../redux/slices/authSlice';
 
 const SidebarDashboard = () => {
     const menus = [
-        { name: "Update Stock", icon: HiOutlineCube, path: "/admin/updatestock" },
         { name: "Add Products", icon: HiOutlineCollection, path: "/admin/products" },
         { name: "Add Category", icon: HiOutlineCollection, path: "/admin/category" },
         { name: "Users", icon: HiOutlineUser, path: "/admin/users" },

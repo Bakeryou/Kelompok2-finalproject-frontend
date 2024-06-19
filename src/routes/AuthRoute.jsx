@@ -7,7 +7,7 @@ const AuthRoute = () => {
   if (!token) {
     return <Outlet />;
   } else if (user?.role === 'admin') {
-    return <Navigate to="/admin/updatestock" replace />;
+    return <Navigate to="/admin/products" replace />;
   } else if (user?.role === 'user') {
     return <Navigate to="/" replace />;
   } else {
