@@ -50,22 +50,24 @@ export const updatePassword = createAsyncThunk(
   }
 );
 
+const initialState = {
+  name: '',
+  email: '',
+  username: '',
+  phone_number: '',
+  address: '',
+  postal_code: '',
+  city: '',
+  old_password: '',
+  new_password: '',
+  confirm_password: '',
+  error: null,
+  message: null,
+};
+
 const profileSlice = createSlice({
   name: 'profile',
-  initialState: {
-    name: '',
-    email: '',
-    username: '',
-    phone_number: '',
-    address: '',
-    postal_code: '',
-    city: '',
-    old_password: '',
-    new_password: '',
-    confirm_password: '',
-    message: '',
-    error: null,
-  },
+  initialState,
   reducers: {
     setName: (state, action) => {
       state.name = action.payload;
@@ -97,6 +99,7 @@ const profileSlice = createSlice({
     setConfirmPassword: (state, action) => {
         state.confirm_password = action.payload;
     },
+    resetProfile: () => initialState,
   },
   extraReducers: (builder) => {
     builder
@@ -131,6 +134,6 @@ const profileSlice = createSlice({
   },
 });
 
-export const { setName, setEmail, setUsername, setPhoneNumber, setAddress, setPostalCode, setCity, setOldPassword, setNewPassword, setConfirmPassword } =
+export const { setName, setEmail, setUsername, setPhoneNumber, setAddress, setPostalCode, setCity, setOldPassword, setNewPassword, setConfirmPassword, resetProfile } =
   profileSlice.actions;
 export default profileSlice.reducer;
