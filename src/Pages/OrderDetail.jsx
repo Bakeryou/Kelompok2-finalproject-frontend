@@ -1,17 +1,36 @@
-import React from 'react';
-import { customerData, orderData } from '../data';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchOrderById } from '../redux/slices/orderSlice';
 
 const OrderDetail = () => {
   const { orderId } = useParams();
-  const order = orderData.find((order) => order.id === parseInt(orderId));
-  
+  const dispatch = useDispatch();
+  const { orders } = useSelector(state => state.orders);
+
+  const order = orders.find((order) => order.id === parseInt(orderId));
+
+  useEffect(() => {
+    dispatch(fetchOrderById(orderId));
+  }, [dispatch, orderId]);
+
   if (!order) {
     return <div>Order not found</div>;
   }
 
-  const customer = customerData.find((customer) => customer.id === order.customerId);
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'process':
+        return 'text-blue-500';
+      case 'completed':
+        return 'text-green-500';
+      case 'canceled':
+        return 'text-red-500';
+      default:
+        return 'text-black';
+    }
+  };
 
   return (
     <div className="flex flex-col justify-center min-h-screen px-4">
@@ -20,51 +39,51 @@ const OrderDetail = () => {
         <div className="p-4">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
             <p className="font-semibold">No Pesanan:</p>
-            <p>{order.id}</p>
+            <p>{order.order_number}</p>
             <p className="font-semibold">Name:</p>
-            <p>{customer.name}</p>
+            <p>{order.customer_name}</p>
             <p className="font-semibold">Email:</p>
-            <p>{customer.email}</p>
+            <p>{order.customer_email}</p>
             <p className="font-semibold">Phone Number:</p>
-            <p>{customer.phoneNumber}</p>
+            <p>{order.customer_phone}</p>
             <p className="font-semibold">Alamat:</p>
-            <p>{customer.address}</p>
+            <p>{order.customer_address}</p>
             <p className="font-semibold">Kode Pos:</p>
-            <p>{customer.postalCode}</p>
+            <p>{order.customer_postal_code}</p>
             <p className="font-semibold">Kota:</p>
-            <p>{customer.city}</p>
+            <p>{order.customer_city}</p>
           </div>
           <div className="mt-4">
             <h3 className="text-lg font-bold mb-2">Order Summary</h3>
             <div className="border-b border-black mb-2"></div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
-              {order.orderSummary.items.map((item, index) => (
-                <React.Fragment key={index}>
-                  <p className="font-semibold">{item.name}</p>
+            {order.order_items?.map((item) => (
+                <React.Fragment key={item.id}>
+                  <p className="font-semibold">{item.product.name}</p>
                   <p>Rp. {item.price.toLocaleString()} - {item.quantity}x</p>
                 </React.Fragment>
               ))}
               <p className="font-semibold">Sub Total:</p>
-              <p className="font-semibold">Rp. {order.orderSummary.subtotal.toLocaleString()}</p>
+              <p className="font-semibold">Rp. {order.subtotal.toLocaleString()}</p>
               <div className="border-b border-black col-span-2"></div>
               <p className="font-semibold">Tax:</p>
-              <p>Rp. {order.orderSummary.tax.toLocaleString()}</p>
+              <p>Rp. {order.tax.toLocaleString()}</p>
               <p className="font-semibold">Shipping:</p>
-              <p>Rp. {order.orderSummary.shipping}</p>
+              <p>Rp. {order.shipping.toLocaleString()}</p>
               <p className="font-bold">Total:</p>
-              <p className="font-bold">Rp. {order.orderSummary.total.toLocaleString()}</p>
+              <p className="font-bold">Rp. {order.total.toLocaleString()}</p>
               <p className="font-semibold">Order Options:</p>
-              <p>{order.orderSummary.orderOptions}</p>
+              <p>{order.order_type}</p>
               <p className="font-semibold">Note:</p>
-              <p>-</p>
+              <p>{order.notes}</p>
             </div>
           </div>
           <div className="mt-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <p className="font-semibold">Waktu Pemesanan:</p>
-              <p>{order.orderTime.orderedAt}</p>
-              <p className="font-semibold">Waktu Pesanan Selesai:</p>
-              <p>{order.orderTime.completedAt}</p>
+              <p>{new Date(order.created_at).toLocaleString()}</p>
+              <p className="font-semibold">Status Pesanan:</p>
+              <p className={`font-bold ${getStatusColor(order.status)}`}>{order.status}</p>
             </div>
           </div>
           <div className="flex justify-center mt-6">

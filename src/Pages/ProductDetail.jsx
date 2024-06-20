@@ -10,7 +10,7 @@ const ProductDetail = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { token } = useSelector((state) => state.auth);
+    const { token, user } = useSelector((state) => state.auth);
     const products = useSelector((state) => state.productUser.products);
     const [product, setProduct] = useState(null);
     const [quantity, setQuantity] = useState(1);
@@ -40,6 +40,11 @@ const ProductDetail = () => {
         if (!token) {
             toast.error('Silakan login terlebih dahulu.');
             navigate('/login');
+            return;
+        }
+
+        if (user.role === 'admin') {
+            toast.error('Admin tidak dapat menambahkan produk ke keranjang.');
             return;
         }
 

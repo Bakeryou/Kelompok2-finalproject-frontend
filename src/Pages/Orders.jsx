@@ -1,13 +1,22 @@
-import { useState } from 'react';
-import { orderData } from '../data';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../components/Pagination';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllOrders } from '../redux/slices/orderSlice';
 
 const Orders = () => {
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.auth);
+  const { orders } = useSelector((state) => state.orders);
+
+  useEffect(() => {
+    dispatch(fetchAllOrders(token));
+  }, [dispatch, token]);
+  
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 7;
 
-  const sortedOrderData = [...orderData].sort((a, b) => new Date(b.orderTime.orderedAt) - new Date(a.orderTime.orderedAt));
+  const sortedOrderData = Array.isArray(orders) ? [...orders].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) : [];
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
@@ -19,8 +28,21 @@ const Orders = () => {
     setCurrentPage(pageNumber);
   };
 
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'process':
+        return 'text-blue-500';
+      case 'completed':
+        return 'text-green-500';
+      case 'canceled':
+        return 'text-red-500';
+      default:
+        return 'text-black';
+    }
+  };
+
   return (
-    <div className="p-4 pt-20 h-screen">
+    <div className="p-4 pt-20 min-h-screen">
       <div className="px-4 mx-auto">
         <div className="-mx-4 flex flex-wrap">
           <div className="w-full">
@@ -42,7 +64,7 @@ const Orders = () => {
                       Waktu Pesan
                     </th>
                     <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
-                      Waktu Pesanan Selesai
+                      Status Pesanan
                     </th>
                     <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
                       Aksi
@@ -50,22 +72,23 @@ const Orders = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {currentProducts.map((order) => (
+                  {sortedOrderData.length > 0 ? (
+                    currentProducts.map((order) => (
                     <tr key={order.id}>
                       <td className="border-b border-l border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
-                        {order.id}
+                        {order.order_number}
                       </td>
                       <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-2 dark:text-dark-7">
-                        {order.orderSummary.orderOptions}
+                        {order.order_type}
                       </td>
                       <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
-                        Rp. {order.orderSummary.total.toLocaleString()}
+                        Rp. {order.total.toLocaleString()}
                       </td>
                       <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
-                        {order.orderTime.orderedAt}
+                      {new Date(order.created_at).toLocaleString()}
                       </td>
-                      <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
-                        {order.orderTime.completedAt}
+                      <td className={`border-b border-black px-2 py-3 text-center text-base font-bold ${getStatusColor(order.status)}`}>
+                        {order.status}
                       </td>
                       <td className="border-b border-r border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-2 dark:text-dark-7">
                         <Link to={`/orderdetail/${order.id}`} className="inline-block rounded-md border border-secondary px-3 py-2 font-medium text-secondary hover:bg-secondary hover:text-white">
@@ -73,7 +96,14 @@ const Orders = () => {
                         </Link>
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ):(
+                  <tr>
+                      <td colSpan="6" className="text-center py-4">
+                        No orders found
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
