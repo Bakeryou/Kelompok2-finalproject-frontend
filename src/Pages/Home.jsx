@@ -18,7 +18,7 @@ const HomePage = () => {
                                 and tea to customers.
                             </p>
                             <Link to="/products">
-                                <button className="bg-[#201203] text-white py-2 px-4 rounded">
+                                <button className="bg-[#201203] text-white py-2 px-4 rounded hover:bg-[#D8AE7E] hover:text-black">
                                     ORDER NOW
                                 </button>
                             </Link>
@@ -47,7 +47,7 @@ const HomePage = () => {
                             every bite tells a story of craftsmanship and passion.
                         </p>
                         <Link to="/products">
-                            <button className="bg-[#201203] text-white py-2 px-4 rounded">
+                            <button className="bg-[#201203] text-white py-2 px-4 rounded hover:bg-[#D8AE7E] hover:text-black">
                                 SEE OUR PRODUCTS
                             </button>
                         </Link>

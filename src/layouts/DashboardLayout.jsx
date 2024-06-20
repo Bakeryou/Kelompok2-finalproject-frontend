@@ -4,8 +4,8 @@ import FooterMain from '../components/FooterMain';
 import SidebarDashboard from '../components/SidebarDashboard';
 
 const DashboardLayout = () => {
-  return (
-    <div className="flex">
+    return (
+        <div className="flex">
             <div className="z-20"> 
                 <SidebarDashboard />
             </div>
@@ -19,7 +19,7 @@ const DashboardLayout = () => {
                 </div>
             </div>   
         </div>
-  );
+    );
 };
 
 export default DashboardLayout;

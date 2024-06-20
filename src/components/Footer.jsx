@@ -1,4 +1,5 @@
 import HalalLogo from '../assets/img/logohalal.png'
+import Logos from '../assets/img/logos.png'
 
 const Footer = () => {
     return (
@@ -6,7 +7,7 @@ const Footer = () => {
             <div className="container mx-auto">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                     <div className="text-black">
-                        <h1 className="mb-2 font-bold">Bakeryou</h1>
+                        <img src={Logos} alt="" className='filter brightness-0 w-2/3' />
                         <p>Enjoy freshly baked bread, hot rolls, wholesome pastries, and delicious treats. Order delivery in a few steps and enjoy our in-house baked treats.</p>
                         <img src={HalalLogo} alt="Logo Halal" className="w-10 mt-4" />
                     </div>
