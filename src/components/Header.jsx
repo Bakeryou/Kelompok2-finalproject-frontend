@@ -5,6 +5,8 @@ import { logout } from '../redux/slices/authSlice';
 import { resetProfile } from '../redux/slices/profileSlice';
 import { resetCart } from '../redux/slices/cartSlice';
 
+import Logos from '../assets/img/logos.png'
+
 const Header = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
@@ -51,7 +53,9 @@ const Header = () => {
                     </div>
                     <div className="flex items-center justify-center flex-1 sm:justify-start">
                         <div className="flex-shrink-0">
-                            <Link to="/" className="text-lg font-bold">Bakeryou</Link>
+                            <Link to="/" className="text-lg font-bold">
+                                <img src={Logos} alt="" className='filter brightness-0 w-24 mt-2' />
+                            </Link>
                         </div>
                         <div className="hidden sm:flex sm:ml-auto sm:mr-auto">
                             <div className="flex justify-center space-x-8">

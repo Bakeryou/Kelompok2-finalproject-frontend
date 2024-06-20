@@ -2,38 +2,38 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import InputField from '../components/InputField';
 import {
-  fetchUserData,
-  updateProfile,
-  updatePassword,
-  setName,
-  setEmail,
-  setUsername,
-  setPhoneNumber,
-  setAddress,
-  setPostalCode,
-  setCity,
-  setOldPassword,
-  setNewPassword,
-  setConfirmPassword,
+    fetchUserData,
+    updateProfile,
+    updatePassword,
+    setName,
+    setEmail,
+    setUsername,
+    setPhoneNumber,
+    setAddress,
+    setPostalCode,
+    setCity,
+    setOldPassword,
+    setNewPassword,
+    setConfirmPassword,
 } from '../redux/slices/profileSlice';
 import { toast } from 'react-toastify';
 
 const Profile = () => {
-  const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.auth);
-  const { name, email, username, phone_number, address, postal_code, city, old_password, new_password, confirm_password } =
-  useSelector((state) => state.profile);
+    const dispatch = useDispatch();
+    const { token } = useSelector((state) => state.auth);
+    const { name, email, username, phone_number, address, postal_code, city, old_password, new_password, confirm_password } =
+    useSelector((state) => state.profile);
 
-  useEffect(() => {
+useEffect(() => {
     dispatch(fetchUserData(token));
-  }, [dispatch, token]);
-  
-  const handleProfileSave = (e) => {
+}, [dispatch, token]);
+
+const handleProfileSave = (e) => {
     e.preventDefault();
     if (!name || !email || !address || !postal_code || !city || !phone_number) {
         toast.error('Please fill in all required fields');
         return;
-      }
+    }
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
@@ -44,14 +44,14 @@ const Profile = () => {
     dispatch(updateProfile({ token, formData }))
     .unwrap()
     .then(() => {
-      toast.success('Profile Saved');
+        toast.success('Profile Saved');
     })
     .catch((err) => {
-      toast.error(err.message);
+        toast.error(err.message);
     });
-  };
+};
 
-  const handlePasswordSave = (e) => {
+const handlePasswordSave = (e) => {
     e.preventDefault();
     if (!old_password || !new_password || !confirm_password) {
         toast.error('Please fill in all password fields');
@@ -65,20 +65,20 @@ const Profile = () => {
         old_password,
         password: new_password,
         confirm_password,
-      };
-      dispatch(updatePassword({ token, passwordData }))
-      .unwrap()
-      .then(() => {
+    };
+    dispatch(updatePassword({ token, passwordData }))
+    .unwrap()
+    .then(() => {
         toast.success('Password Changed');
         // Clear password fields
         dispatch(setOldPassword(''));
         dispatch(setNewPassword(''));
         dispatch(setConfirmPassword(''));
-      })
-      .catch((err) => {
+    })
+    .catch((err) => {
         toast.error(err.message);
-      });
-  };
+    });
+};
 
     return (
         <div className="min-h-screen py-20">
