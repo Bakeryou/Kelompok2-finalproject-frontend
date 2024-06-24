@@ -120,7 +120,7 @@ const Payment = () => {
                         />
                         <label htmlFor="delivery" className="ml-2">Delivery</label>
                     </div>
-                    <h2 className="text-2xl font-bold mb-4">Delivery Information</h2>
+                    <h2 className="text-2xl font-bold mb-4">User Information</h2>
                     <form>
                         <InputField
                             label="Name"

@@ -17,7 +17,7 @@ const ProductDetail = () => {
 
     useEffect(() => {
         if (products.length === 0) {
-            dispatch(fetchProducts()); // Ambil produk jika belum ada di Redux store
+            dispatch(fetchProducts());
         }
     }, [dispatch, products.length]);
 
