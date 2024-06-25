@@ -1,19 +1,18 @@
-import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import InputField from "../components/InputField.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart, resetCart } from "../redux/slices/cartSlice.js";
 import { fetchUserData } from "../redux/slices/profileSlice.js";
-import { checkoutOrder } from "../redux/slices/orderSlice.js";
+import { checkoutOrder, fetchClientKey } from "../redux/slices/orderSlice.js";
 import { toast } from "react-toastify";
 
 const Payment = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const { token } = useSelector((state) => state.auth);
     const cart = useSelector((state) => state.cart.items);
     const products = useSelector((state) => state.productUser.products);
     const profile = useSelector((state) => state.profile);
+    const clientKey = useSelector((state) => state.orders.clientKey);
 
     const [formData, setFormData] = useState({
         name: '',
@@ -23,27 +22,39 @@ const Payment = () => {
         postal_code: '',
         city: '',
         notes: '',
-        order_type: 'pickup',
+        order_type: 'Pickup',
       });
+
+    const [snapToken, setSnapToken] = useState(null);
 
     useEffect(() => {
         dispatch(fetchCart());
         dispatch(fetchUserData(token));
-  }, [dispatch, token]);
+        dispatch(fetchClientKey());
+    }, [dispatch, token]);
 
     useEffect(() => {
         if (profile) {
-            setFormData((prevFormData) => ({
-                ...prevFormData,
-                name: profile.name,
-                email: profile.email,
-                phone_number: profile.phone_number,
-                address: profile.address,
-                postal_code: profile.postal_code,
-                city: profile.city,
-            }));
+          setFormData((prevFormData) => ({
+            ...prevFormData,
+            name: profile.name || '',
+            email: profile.email || '',
+            phone_number: profile.phone_number || '',
+            address: profile.address || '',
+            postal_code: profile.postal_code || '',
+            city: profile.city || '',
+          }));
         }
-    }, [profile]);
+      }, [profile]);
+
+    useEffect(() => {
+        if (clientKey) {
+          const script = document.createElement("script");
+          script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+          script.setAttribute("data-client-key", clientKey);
+          document.body.appendChild(script);
+        }
+    }, [clientKey]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -62,36 +73,80 @@ const Payment = () => {
 
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
     const tax = subtotal * 0.1; // 10% tax
-    const shipping = formData.order_type === "pickup" ? 0 : (cart.total_weight > 1000 ? 25000 : 15000); // shipping cost based on weight
+    const shipping = formData.order_type === "  Pickup" ? 0 : (cart.total_weight > 1000 ? 25000 : 15000);
     const total = subtotal + tax + shipping;
 
-    const handleCheckout = () => {
-        // Proses pembuatan order
-        const orderData = {
-          order_type: formData.order_type,
-          customer_name: formData.name,
-          customer_email: formData.email,
-          customer_phone: formData.phone_number,
-          customer_address: formData.address,
-          customer_postal_code: formData.postal_code,
-          customer_city: formData.city,
-          notes: formData.notes,
-          subtotal: subtotal,
-          tax: tax,
-          shipping: shipping,
-          total: total,
-        };
-    
-        dispatch(checkoutOrder(orderData))
-          .then(() => {
-            dispatch(resetCart()); // Reset cart setelah berhasil checkout
-            toast.success('Order berhasil dibuat!');
-            navigate('/paymentsuccess'); // Redirect ke halaman success setelah berhasil checkout
-          })
-          .catch((error) => {
-            toast.error(`Terjadi kesalahan: ${error.message}`);
-          });
+    const isProfileComplete = () => {
+        const requiredFields = ["name", "email", "phone_number", "address", "postal_code", "city"];
+        return requiredFields.every(field => formData[field].trim() !== "");
       };
+
+    const handleCheckout = () => {
+        if (!isProfileComplete()) {
+            toast.error("Please complete your profile data before proceeding to checkout.");
+            return;
+          }
+
+          if (formData.order_type === "Delivery" && formData.city.toLowerCase() !== 'surabaya') {
+            toast.warning("Pengiriman hanya tersedia untuk area Surabaya. Silahkan pilih pickup jika anda masih ingin melanjutkan.");
+            return;
+          }
+
+          if (!window.snap) {
+            toast.error("Payment service is not ready. Please try again later.");
+            return;
+          }
+            const orderData = {
+                order_type: formData.order_type,
+                customer_name: formData.name,
+                customer_email: formData.email,
+                customer_phone: formData.phone_number,
+                customer_address: formData.address,
+                customer_postal_code: formData.postal_code,
+                customer_city: formData.city,
+                notes: formData.notes,
+                subtotal: subtotal,
+                tax: tax,
+                shipping: shipping,
+                total: total,
+            };
+    
+            dispatch(checkoutOrder(orderData))
+            .then(response => {
+                const { snapToken } = response.payload;
+                setSnapToken(snapToken);
+            })
+            .catch(error => {
+                toast.error(`Error: ${error.message}`);
+            });
+        };
+
+        useEffect(() => {
+            if (snapToken) {
+                window.snap.pay(snapToken, {
+                    onSuccess: function(result) {
+                        console.log('Payment success:', result);
+                        toast.success('Payment success!');
+                        window.location.href = '/orders';
+                    },
+                    onPending: function(result) {
+                        console.log('Payment pending:', result);
+                        toast.info('Payment is pending.');
+                        window.location.href = '/orders';
+                    },
+                    onError: function(result) {
+                        console.log('Payment error:', result);
+                        toast.error('Payment failed.');
+                        window.location.href = '/orders';
+                    },
+                    onClose: function() {
+                        console.log('Payment popup closed.');
+                        window.location.href = '/orders';
+                    }
+                });
+            }
+            dispatch(resetCart());
+        }, [snapToken, dispatch]);
 
     return (
         <div className="p-4 py-20 min-h-screen">
@@ -101,24 +156,24 @@ const Payment = () => {
                     <div className="flex items-center mb-4">
                         <input 
                             type="radio" 
-                            id="pickup" 
+                            id="Pickup" 
                             name="order_type" 
-                            value="pickup" 
-                            checked={formData.order_type === "pickup"} 
+                            value="Pickup" 
+                            checked={formData.order_type === "Pickup"} 
                             onChange={handleOrderTypeChange} 
                         />
-                        <label htmlFor="pickup" className="ml-2">Pickup</label>
+                        <label htmlFor="Pickup" className="ml-2">Pickup</label>
                     </div>
                     <div className="flex items-center mb-4">
                         <input 
                             type="radio" 
-                            id="delivery" 
+                            id="Delivery" 
                             name="order_type" 
-                            value="delivery" 
-                            checked={formData.order_type === "delivery"} 
+                            value="Delivery" 
+                            checked={formData.order_type === "Delivery"} 
                             onChange={handleOrderTypeChange} 
                         />
-                        <label htmlFor="delivery" className="ml-2">Delivery</label>
+                        <label htmlFor="Delivery" className="ml-2">Delivery</label>
                     </div>
                     <h2 className="text-2xl font-bold mb-4">User Information</h2>
                     <form>

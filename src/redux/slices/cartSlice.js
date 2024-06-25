@@ -33,15 +33,26 @@ export const addToCart = createAsyncThunk('cart/addToCart', async (productData, 
   }
 });
 
-export const updateCartItem = createAsyncThunk('cart/updateCartItem', async ({ id, qty }, { getState }) => {
-    const token = getState().auth.token;
-    const response = await axios.post(`/cart/${id}`, { qty }, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'multipart/form-data',
-        },
-    });
-    return response.data.data;
+export const increaseCartItem = createAsyncThunk('cart/increaseCartItem', async ({ id }, { getState }) => {
+  const token = getState().auth.token;
+  const response = await axios.post(`/cart/${id}/increase`, {}, {
+      headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+      },
+  });
+  return response.data.data;
+});
+
+export const decreaseCartItem = createAsyncThunk('cart/decreaseCartItem', async ({ id }, { getState }) => {
+  const token = getState().auth.token;
+  const response = await axios.post(`/cart/${id}/decrease`, {}, {
+      headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data',
+      },
+  });
+  return response.data.data;
 });
 
 export const removeCartItem = createAsyncThunk('cart/removeCartItem', async (id, { getState }) => {
@@ -98,7 +109,16 @@ const cartSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload || action.error.message;
     })
-    .addCase(updateCartItem.fulfilled, (state, action) => {
+    .addCase(increaseCartItem.fulfilled, (state, action) => {
+      const updatedItem = action.payload;
+      const existingItem = state.items.find(item => item.id === updatedItem.id);
+      if (existingItem) {
+          existingItem.qty = updatedItem.qty;
+          existingItem.total_price = updatedItem.total_price;
+      }
+      state.subtotal = action.payload.cart.subtotal;
+    })
+    .addCase(decreaseCartItem.fulfilled, (state, action) => {
         const updatedItem = action.payload;
         const existingItem = state.items.find(item => item.id === updatedItem.id);
         if (existingItem) {

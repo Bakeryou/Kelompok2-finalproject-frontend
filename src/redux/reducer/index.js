@@ -6,6 +6,7 @@ import productReducer from '../slices/productSlice';
 import productUserReducer from '../slices/productUserSlice';
 import cartReducer from '../slices/cartSlice';
 import orderReducer from '../slices/orderSlice';
+import userReducer from '../slices/userSlice';
 
 const reducer = combineReducers({
     auth: authReducer,
@@ -15,6 +16,7 @@ const reducer = combineReducers({
     productUser: productUserReducer,
     cart: cartReducer,
     orders: orderReducer,
+    users: userReducer,
 });
 
 export default reducer;

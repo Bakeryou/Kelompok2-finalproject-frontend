@@ -16,10 +16,8 @@ const ProductDetail = () => {
     const [quantity, setQuantity] = useState(1);
 
     useEffect(() => {
-        if (products.length === 0) {
-            dispatch(fetchProducts());
-        }
-    }, [dispatch, products.length]);
+        dispatch(fetchProducts());
+    }, [dispatch]);
 
     useEffect(() => {
         const selectedProduct = products.find(p => p.id === parseInt(id));

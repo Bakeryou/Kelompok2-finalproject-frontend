@@ -2,18 +2,28 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchOrderById } from '../redux/slices/orderSlice';
+import { fetchClientKey, fetchOrderById, updateOrderStatus } from '../redux/slices/orderSlice';
+import { toast } from 'react-toastify';
 
 const OrderDetail = () => {
   const { orderId } = useParams();
   const dispatch = useDispatch();
-  const { orders } = useSelector(state => state.orders);
-
+  const { orders, clientKey } = useSelector(state => state.orders);
   const order = orders.find((order) => order.id === parseInt(orderId));
 
   useEffect(() => {
     dispatch(fetchOrderById(orderId));
+    dispatch(fetchClientKey());
   }, [dispatch, orderId]);
+
+  useEffect(() => {
+    if (clientKey) {
+      const script = document.createElement("script");
+      script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+      script.setAttribute("data-client-key", clientKey);
+      document.body.appendChild(script);
+    }
+  }, [clientKey]);
 
   if (!order) {
     return <div>Order not found</div>;
@@ -21,15 +31,57 @@ const OrderDetail = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'process':
+      case 'Pending':
+        return 'text-yellow-500';
+      case 'Process':
         return 'text-blue-500';
-      case 'completed':
+      case 'Completed':
+      case 'Paid':
         return 'text-green-500';
-      case 'canceled':
+      case 'Canceled':
+      case 'Unpaid':
         return 'text-red-500';
       default:
         return 'text-black';
     }
+  };
+
+  const handlePay = () => {
+    if (!window.snap) {
+      toast.error("Payment service is not ready. Please try again later.");
+      return;
+    }
+
+    window.snap.pay(order.snap_token, {
+      onSuccess: function(result) {
+        console.log('Payment success:', result);
+        toast.success('Payment success!');
+      },
+      onPending: function(result) {
+        console.log('Payment pending:', result);
+        toast.info('Payment is pending.');
+      },
+      onError: function(result) {
+        console.log('Payment error:', result);
+        toast.error('Payment failed.');
+      },
+      onClose: function() {
+        console.log('Payment popup closed.');
+      }
+    });
+  };
+
+  const handleCancelOrder = () => {
+    dispatch(updateOrderStatus({ orderId: order.id, status: 'Canceled' }))
+      .unwrap()
+      .then(() => {
+        toast.success('Pesanan berhasil dibatalkan.');
+        // Lakukan tindakan tambahan jika perlu, misalnya update state
+      })
+      .catch((error) => {
+        toast.error('Gagal membatalkan pesanan.');
+        console.error('Error cancelling order:', error);
+      });
   };
 
   return (
@@ -82,12 +134,20 @@ const OrderDetail = () => {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <p className="font-semibold">Waktu Pemesanan:</p>
               <p>{new Date(order.created_at).toLocaleString()}</p>
+              <p className="font-semibold">Status Pembayaran:</p>
+              <p className={`font-bold ${getStatusColor(order.status_payment)}`}>{order.status_payment}</p>
               <p className="font-semibold">Status Pesanan:</p>
               <p className={`font-bold ${getStatusColor(order.status)}`}>{order.status}</p>
             </div>
           </div>
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center mt-6 gap-6">
           <Link to="/orders" className="btn btn-primary py-2 px-4 mt-4">Kembali</Link>
+            {(order.status_payment === 'Unpaid' && order.status !== 'Canceled') && (
+              <>
+                <button onClick={handlePay} className="btn btn-primary py-2 px-4 mt-4">Bayar</button>
+                <button onClick={handleCancelOrder} className="btn btn-primary py-2 px-4 mt-4">Batalkan Pesanan</button>
+              </>
+            )}
           </div>
         </div>
       </div>

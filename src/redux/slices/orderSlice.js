@@ -16,6 +16,20 @@ export const fetchAllOrders = createAsyncThunk('orders/fetchAll', async (_, { ge
   }
 });
 
+export const fetchAllOrdersAdmin = createAsyncThunk('orders/fetchAll', async (_, { getState, rejectWithValue }) => {
+  try {
+    const token = getState().auth.token;
+    const response = await axios.get('/orders-admin', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
 // Action untuk mengambil order berdasarkan ID
 export const fetchOrderById = createAsyncThunk('orders/fetchById', async (orderId, { getState, rejectWithValue }) => {
   try {
@@ -49,6 +63,27 @@ export const checkoutOrder = createAsyncThunk('orders/checkout', async (formData
 });
 
 // Action untuk update status order
+export const updateOrderStatusAdmin = createAsyncThunk(
+  'orders/updateStatusAdmin',
+  async ({ orderId, status }, { getState, rejectWithValue }) => {
+    try {
+      const token = getState().auth.token;
+      const response = await axios.post(
+        `orders-admin/status/${orderId}`,
+        { status },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 export const updateOrderStatus = createAsyncThunk(
   'orders/updateStatus',
   async ({ orderId, status }, { getState, rejectWithValue }) => {
@@ -70,6 +105,20 @@ export const updateOrderStatus = createAsyncThunk(
   }
 );
 
+export const fetchClientKey = createAsyncThunk('orders/fetchClientKey', async (_, {getState, rejectWithValue }) => {
+  try {
+    const token = getState().auth.token;
+    const response = await axios.get('/midtrans-client-key',{
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data.client_key;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+});
+
 const initialState = {
   orders: [],
   order: null,
@@ -83,6 +132,7 @@ const orderSlice = createSlice({
   reducers: {
     resetOrderState: (state) => {
       state.order = null;
+      state.orders = null;
       state.status = 'idle';
       state.error = null;
     },
@@ -124,14 +174,44 @@ const orderSlice = createSlice({
         state.status = 'failed';
         state.error = action.payload.message;
       })
+      .addCase(updateOrderStatusAdmin.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(updateOrderStatusAdmin.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        const updatedOrder = action.payload;
+        const existingOrder = state.orders.find(order => order.id === updatedOrder.id);
+        if (existingOrder) {
+          existingOrder.status = updatedOrder.status;
+        }
+      })
+      .addCase(updateOrderStatusAdmin.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload.message;
+      })
       .addCase(updateOrderStatus.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(updateOrderStatus.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.order = action.payload;
+        const updatedOrder = action.payload;
+        const existingOrder = state.orders.find(order => order.id === updatedOrder.id);
+        if (existingOrder) {
+          existingOrder.status = updatedOrder.status;
+        }
       })
       .addCase(updateOrderStatus.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload.message;
+      })
+      .addCase(fetchClientKey.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchClientKey.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.clientKey = action.payload;
+      })
+      .addCase(fetchClientKey.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload.message;
       });

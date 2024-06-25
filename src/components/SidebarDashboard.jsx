@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { HiMenuAlt3, HiOutlineCollection, HiOutlineUser, HiOutlineClipboardList, HiOutlineChartBar, HiOutlineLogout } from "react-icons/hi";
+import { HiMenuAlt3, HiOutlineCollection, HiOutlineUser, HiOutlineClipboardList, HiOutlineLogout } from "react-icons/hi";
 import { useDispatch } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { logout } from '../redux/slices/authSlice';
 import { resetProfile } from "../redux/slices/profileSlice";
+import { resetOrderState } from "../redux/slices/orderSlice";
 
 const SidebarDashboard = () => {
     const menus = [
@@ -11,7 +12,6 @@ const SidebarDashboard = () => {
         { name: "Add Category", icon: HiOutlineCollection, path: "/admin/category" },
         { name: "Users", icon: HiOutlineUser, path: "/admin/users" },
         { name: "Orders", icon: HiOutlineClipboardList, path: "/admin/orders" },
-        { name: "Report", icon: HiOutlineChartBar, margin: true, path: "/admin/report" },
         { name: "Profile", icon: HiOutlineUser, margin: true, path: "/admin/profile" },
         { name: "Logout", icon: HiOutlineLogout, path: "/login" },
     ];
@@ -39,6 +39,7 @@ const SidebarDashboard = () => {
     const handleLogout = () => {
         dispatch(logout());
         dispatch(resetProfile());
+        dispatch(resetOrderState());
     };
 
     return (

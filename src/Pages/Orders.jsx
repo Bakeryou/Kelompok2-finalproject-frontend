@@ -30,11 +30,15 @@ const Orders = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'process':
+      case 'Pending':
+        return 'text-yellow-500';
+      case 'Process':
         return 'text-blue-500';
-      case 'completed':
+      case 'Completed':
+      case 'Paid':
         return 'text-green-500';
-      case 'canceled':
+      case 'Canceled':
+      case 'Unpaid':
         return 'text-red-500';
       default:
         return 'text-black';
@@ -64,6 +68,9 @@ const Orders = () => {
                       Waktu Pesan
                     </th>
                     <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
+                      Status Pembayaran
+                    </th>
+                    <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
                       Status Pesanan
                     </th>
                     <th className="w-1/6 min-w-[150px] border-l border-transparent px-3 py-4 text-lg font-semibold lg:px-4 lg:py-3">
@@ -87,6 +94,9 @@ const Orders = () => {
                       <td className="border-b border-black px-2 py-3 text-center text-base font-medium text-dark dark:border-dark dark:bg-dark-3 dark:text-dark-7">
                       {new Date(order.created_at).toLocaleString()}
                       </td>
+                      <td className={`border-b border-black px-2 py-3 text-center text-base font-bold ${getStatusColor(order.status_payment)}`}>
+                        {order.status_payment}
+                      </td>
                       <td className={`border-b border-black px-2 py-3 text-center text-base font-bold ${getStatusColor(order.status)}`}>
                         {order.status}
                       </td>
@@ -99,10 +109,10 @@ const Orders = () => {
                   ))
                 ):(
                   <tr>
-                      <td colSpan="6" className="text-center py-4">
+                      <td colSpan="7" className="text-center py-4">
                         No orders found
                       </td>
-                    </tr>
+                  </tr>
                   )}
                 </tbody>
               </table>
