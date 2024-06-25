@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import InputField from "../components/InputField"
 
 const HomePage = () => {
     return (
@@ -70,47 +69,6 @@ const HomePage = () => {
                             <h3 className="text-xl font-semibold">Opening Hours :</h3>
                             <p>Monday - Friday: 09.00 - 16.00 WIB</p>
                             <p>Saturday - Sunday: 10.00 - 19.00 WIB</p>
-                        </div>
-                    </div>
-                </section>
-                <section className="py-16 bg-[#f3e2cf]">
-                    <div className="grid items-start grid-cols-1 gap-8 md:grid-cols-2">
-                        <div className="px-8">
-                            <h2 className="mb-6 text-3xl font-bold text-center md:text-left">
-                                Contact Us
-                            </h2>
-                            <form className="space-y-4">
-                                <InputField
-                                    label="Name"
-                                    type="text"
-                                    placeholder="Input your name here"
-                                />
-                                <InputField
-                                    label="Email"
-                                    type="email"
-                                    placeholder="Input your email here"
-                                />
-                                <div className="flex flex-col gap-2 mt-2">
-                                    <label className="font-medium text-primary">Message</label>
-                                    <textarea
-                                        placeholder="Input your message here"
-                                        className="input"
-                                        rows="4"
-                                    ></textarea>
-                                </div>
-                                <button
-                                    type="submit"
-                                    className="w-full bg-[#201203] text-white py-2 px-4 rounded-md hover:bg-[#392613] transition duration-200 ease-in-out"
-                                >
-                                    SUBMIT
-                                </button>
-                            </form>
-                        </div>
-                        <div className="flex justify-center">
-                            <img
-                                src="./src/assets/img/Bread Photography 2.png"
-                                alt="Bakery items"
-                            />
                         </div>
                     </div>
                 </section>

@@ -17,10 +17,10 @@ const authSlice = createSlice({
       localStorage.setItem('token', action.payload.token);
       state.error = null;
     },
-    register: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      localStorage.setItem('token', action.payload.token);
+    register: (state) => {
+      // state.user = action.payload.user;
+      // state.token = action.payload.token;
+      // localStorage.setItem('token', action.payload.token);
       state.error = null;
     },
     logout: (state) => {

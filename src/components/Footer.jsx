@@ -31,8 +31,8 @@ const Footer = () => {
                         <h1 className="mb-2 font-bold">Get in Touch</h1>
                         <ul className="space-y-1">
                             <li>Surabaya</li>
-                            <li>089xxxxxxx</li>
-                            <li>Otakkanan@gmail.com</li>
+                            <li>0895391403539</li>
+                            <li>bakeryou@gmail.com</li>
                         </ul>
                     </div>
                 </div>

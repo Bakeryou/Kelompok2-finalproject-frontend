@@ -73,7 +73,7 @@ const Payment = () => {
 
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
     const tax = subtotal * 0.1; // 10% tax
-    const shipping = formData.order_type === "  Pickup" ? 0 : (cart.total_weight > 1000 ? 25000 : 15000);
+    const shipping = formData.order_type === "Pickup" ? 0 : (cart.total_weight > 1000 ? 25000 : 15000);
     const total = subtotal + tax + shipping;
 
     const isProfileComplete = () => {
