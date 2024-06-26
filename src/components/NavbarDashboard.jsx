@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { HiOutlineSearch, HiChevronDown, HiOutlineUser, HiOutlineLogout, HiX, HiDotsVertical } from 'react-icons/hi';
+import { HiChevronDown, HiOutlineUser, HiOutlineLogout, HiX, HiDotsVertical } from 'react-icons/hi';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout } from '../redux/slices/authSlice';
@@ -35,14 +35,14 @@ const NavbarDashboard = () => {
     return (
         <nav className="bg-white flex w-full h-[71px] px-7 items-center justify-end sticky top-0 z-50">
             {/* Search bar */}
-            <div className="hidden lg:flex flex-1">
+            {/* <div className="hidden lg:flex flex-1">
                 <div className="relative">
                     <input type="text" placeholder="Search" className="w-64 border-2 border-border p-2 rounded-xl bg-transparent focus:ring focus:ring-focus focus:outline-none focus:border-focus" />
                     <button className="text-primary justify-center items-center absolute right-3 top-1/2 transform -translate-y-1/2">
                         <HiOutlineSearch size={20} />
                     </button>
                 </div>
-            </div>
+            </div> */}
 
             {/* Hamburger icon */}
             <div className="md:hidden">
