@@ -83,12 +83,12 @@ const Payment = () => {
 
     const handleCheckout = () => {
         if (!isProfileComplete()) {
-            toast.error("Please complete your profile data before proceeding to checkout.");
+            toast.error("Silahkan lengkapi profile anda sebelum melakukan pembayaran.");
             return;
           }
 
           if (formData.order_type === "Delivery" && formData.city.toLowerCase() !== 'surabaya') {
-            toast.warning("Pengiriman hanya tersedia untuk area Surabaya. Silahkan pilih pickup jika anda masih ingin melanjutkan.");
+            toast.warning("Delivery hanya tersedia untuk area Surabaya. Silahkan pilih Pickup jika anda masih ingin melanjutkan.");
             return;
           }
 

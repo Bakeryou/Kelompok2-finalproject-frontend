@@ -8,8 +8,8 @@ import { resetOrderState } from "../redux/slices/orderSlice";
 
 const SidebarDashboard = () => {
     const menus = [
-        { name: "Add Products", icon: HiOutlineCollection, path: "/admin/products" },
-        { name: "Add Category", icon: HiOutlineCollection, path: "/admin/category" },
+        { name: "Products", icon: HiOutlineCollection, path: "/admin/products" },
+        { name: "Categories", icon: HiOutlineCollection, path: "/admin/category" },
         { name: "Users", icon: HiOutlineUser, path: "/admin/users" },
         { name: "Orders", icon: HiOutlineClipboardList, path: "/admin/orders" },
         { name: "Profile", icon: HiOutlineUser, margin: true, path: "/admin/profile" },

@@ -38,7 +38,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className="mt-5 text-center text-black">
-                <h1>Copyright @ 2024 Kelompok 2 | Bakeryou</h1>
+                <h1>Copyright @ 2024 | Bakeryou</h1>
             </div>
         </footer>
     );
